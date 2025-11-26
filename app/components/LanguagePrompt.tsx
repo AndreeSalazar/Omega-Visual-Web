@@ -416,7 +416,17 @@ export default function LanguagePrompt() {
                              ease: "linear",
                            }}
                          />
-                         <span className="text-3xl">🇵🇪</span>
+                         {/* Peru Flag SVG */}
+                         <svg 
+                           className="w-8 h-6 flex-shrink-0" 
+                           viewBox="0 0 900 600" 
+                           xmlns="http://www.w3.org/2000/svg"
+                         >
+                           <rect width="900" height="600" fill="#D91023"/>
+                           <rect x="0" y="0" width="300" height="600" fill="#D91023"/>
+                           <rect x="300" y="0" width="300" height="600" fill="#ffffff"/>
+                           <rect x="600" y="0" width="300" height="600" fill="#D91023"/>
+                         </svg>
                          <span className="relative z-10 drop-shadow-lg">{t.languagePrompt.switchTo}</span>
                          <motion.div
                            className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100"

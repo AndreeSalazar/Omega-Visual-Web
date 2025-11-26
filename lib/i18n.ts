@@ -13,10 +13,10 @@ export const translations = {
     },
     // Language Prompt
     languagePrompt: {
-      title: 'Do you want to change language?',
-      subtitle: 'Switch language now for a better experience',
+      title: '¿Cambiar Idioma a Español?',
+      subtitle: 'If not, you can ignore it by keeping English',
       keepCurrent: 'Keep in English',
-      switchTo: 'Yes, I do',
+      switchTo: 'Si Cambiar a Español',
       close: 'Close',
     },
     // Hero
