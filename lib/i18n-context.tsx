@@ -3,12 +3,12 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { Locale, translations, defaultLocale } from './i18n'
 
-type Translations = typeof translations.en
+type Translations = typeof translations.en | typeof translations.es
 
 interface I18nContextType {
   locale: Locale
   setLocale: (locale: Locale) => void
-  t: Translations
+  t: typeof translations[Locale]
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined)
