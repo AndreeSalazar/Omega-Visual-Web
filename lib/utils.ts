@@ -13,28 +13,33 @@ export function formatNumber(num: number): string {
 }
 
 // Get the correct asset path for GitHub Pages
+// Next.js automatically handles basePath for static assets, but we need to ensure
+// the path is correct during build time and runtime
 export function getAssetPath(path: string): string {
   // Remove leading slash from path if present
   const cleanPath = path.startsWith('/') ? path.slice(1) : path
   
-  // Check if we're on GitHub Pages by looking at the current pathname
-  if (typeof window !== 'undefined') {
-    const pathname = window.location.pathname
-    // If pathname starts with /Omega-Visual-Web, we're on GitHub Pages
-    if (pathname.startsWith('/Omega-Visual-Web')) {
-      return `/Omega-Visual-Web/${cleanPath}`
-    }
-    // If we're at root in production, also use basePath
-    if (pathname === '/' && window.location.hostname !== 'localhost') {
-      return `/Omega-Visual-Web/${cleanPath}`
-    }
+  // During build time (SSR/SSG), use environment variable or default basePath
+  if (typeof window === 'undefined') {
+    const isGithubPages = process.env.GITHUB_PAGES === 'true' || process.env.GITHUB_ACTIONS === 'true'
+    const basePath = isGithubPages ? '/Omega-Visual-Web' : ''
+    return basePath ? `${basePath}/${cleanPath}` : `/${cleanPath}`
   }
   
-  // For server-side rendering or build time
-  // Check environment variable or default to basePath for production
-  const isProduction = typeof process !== 'undefined' && process.env.NODE_ENV === 'production'
-  const basePath = isProduction ? '/Omega-Visual-Web' : ''
+  // Runtime: Check if we're on GitHub Pages by looking at the current pathname
+  const pathname = window.location.pathname
+  // If pathname starts with /Omega-Visual-Web, we're on GitHub Pages
+  if (pathname.startsWith('/Omega-Visual-Web')) {
+    return `/Omega-Visual-Web/${cleanPath}`
+  }
   
-  return basePath ? `${basePath}/${cleanPath}` : `/${cleanPath}`
+  // For localhost, use root path
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return `/${cleanPath}`
+  }
+  
+  // For production (non-GitHub Pages), also use basePath if needed
+  // This handles cases where the site might be deployed elsewhere
+  return `/${cleanPath}`
 }
 
