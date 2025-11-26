@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { HardDrive, Settings, Gamepad2, Shield, Building2, Cpu } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 const useCases = [
   {
@@ -43,6 +44,8 @@ const useCases = [
 ]
 
 export default function UseCases() {
+  const { t } = useI18n()
+  
   return (
     <section id="use-cases" className="py-24 bg-gradient-to-b from-background via-surface to-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -52,7 +55,7 @@ export default function UseCases() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          Built for the Hardest Problems in Computing
+          {t.useCases.title}
         </motion.h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Play, Terminal } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 interface Node {
   id: string
@@ -99,6 +100,7 @@ Execution result:
 ]
 
 export default function InteractiveDemo() {
+  const { t } = useI18n()
   const [selectedNode, setSelectedNode] = useState<Node | null>(initialNodes[0])
   const [isRunning, setIsRunning] = useState(false)
   const [terminalOutput, setTerminalOutput] = useState('')
@@ -377,7 +379,7 @@ export default function InteractiveDemo() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          See It In Action
+          {t.demo.title}
         </motion.h2>
 
         <div className="grid lg:grid-cols-5 gap-8">
@@ -385,7 +387,7 @@ export default function InteractiveDemo() {
           <div className="lg:col-span-3">
             <div className="bg-surface rounded-xl p-6 border border-text/10">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-text">Node Canvas</h3>
+                <h3 className="text-xl font-bold text-text">{t.demo.canvasTitle}</h3>
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: '0 5px 20px rgba(255, 107, 53, 0.4)' }}
                   whileTap={{ scale: 0.95 }}
@@ -401,12 +403,12 @@ export default function InteractiveDemo() {
                           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                           className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
                         />
-                        Running...
+                        {t.demo.running}
                       </>
                     ) : (
                       <>
                         <Play size={16} />
-                        Run Demo
+                        {t.demo.runDemo}
                       </>
                     )}
                   </span>
@@ -438,7 +440,7 @@ export default function InteractiveDemo() {
               <div className="mt-4 bg-background rounded-lg p-4 border border-text/10">
                 <div className="flex items-center gap-2 mb-2">
                   <Terminal size={16} className="text-secondary" />
-                  <span className="text-sm text-text/60">Terminal Output</span>
+                  <span className="text-sm text-text/60">{t.demo.terminalOutput}</span>
                 </div>
                 <pre className="text-sm text-text/80 font-mono whitespace-pre-wrap">
                   {terminalOutput ? (
@@ -454,7 +456,7 @@ export default function InteractiveDemo() {
                       </motion.span>
                     ))
                   ) : (
-                    <span className="text-text/40">Click "Run Demo" to see compilation...</span>
+                    <span className="text-text/40">{t.demo.clickToRun}</span>
                   )}
                 </pre>
               </div>
@@ -465,7 +467,7 @@ export default function InteractiveDemo() {
           <div className="lg:col-span-2">
             <div className="bg-surface rounded-xl p-6 border border-text/10 h-full">
               <h3 className="text-xl font-bold text-text mb-4">
-                {selectedNode?.label || 'Select a node'}
+                {selectedNode?.label || t.demo.selectNode}
               </h3>
               <div className="bg-background rounded-lg p-4 overflow-auto max-h-[600px] border border-text/10">
                 <pre className="text-sm text-text/90 font-mono leading-relaxed">
@@ -486,7 +488,7 @@ export default function InteractiveDemo() {
                 </pre>
               </div>
               <p className="text-sm text-text/60 mt-4">
-                Click nodes on the canvas to view their code
+                {t.demo.clickNodes}
               </p>
             </div>
           </div>

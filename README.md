@@ -2,6 +2,9 @@
 
 A stunning, modern landing page for Omega-Visual - "The Operating System for Code". Built with Next.js 14, React, TypeScript, Tailwind CSS, and Framer Motion.
 
+**Author:** Eddi Andreé Salazar Matos  
+**Copyright:** © 2024-2025 Eddi Andreé Salazar Matos. All rights reserved.
+
 ## 🚀 Features
 
 - **Modern Design**: Dark theme with vibrant accent colors
@@ -10,6 +13,8 @@ A stunning, modern landing page for Omega-Visual - "The Operating System for Cod
 - **Fully Responsive**: Mobile-first design approach
 - **SEO Optimized**: Next.js SSR for better SEO
 - **Type Safe**: Full TypeScript support
+- **🌍 Internationalization**: Full support for English and Spanish
+- **🚀 GitHub Pages Ready**: Configured for static export and GitHub Pages deployment
 
 ## 📋 Sections
 
@@ -73,18 +78,31 @@ Each component is self-contained. Edit the data arrays in each component file.
 
 ## 🚢 Deployment
 
-### Vercel (Recommended)
+### GitHub Pages (Configured)
+
+This project is configured for GitHub Pages deployment:
+
+1. Push code to GitHub repository
+2. Enable GitHub Pages in Settings → Pages
+3. Select "GitHub Actions" as source
+4. The workflow (`.github/workflows/deploy.yml`) will automatically deploy on push to `main`
+
+**URL Format:** `https://[username].github.io/Omega-Visual-Web/`
+
+See [DEPLOY.md](./DEPLOY.md) for detailed deployment instructions.
+
+### Vercel (Alternative)
 
 1. Push to GitHub
 2. Import project in Vercel
 3. Deploy automatically
 
-### Netlify
+### Netlify (Alternative)
 
 1. Push to GitHub
 2. Connect to Netlify
 3. Build command: `npm run build`
-4. Publish directory: `.next`
+4. Publish directory: `out`
 
 ## 📊 Performance
 
@@ -101,9 +119,28 @@ Create a `.env.local` file for any API keys (email service, analytics, etc.):
 NEXT_PUBLIC_EMAIL_SERVICE_API_KEY=your_key_here
 ```
 
-## 📄 License
+## 🌍 Internationalization (i18n)
 
-Proprietary - All rights reserved
+The site supports two languages:
+- **English (en)** - Default
+- **Spanish (es)** - Español
+
+### Language Switcher
+
+A language switcher is available in the navbar. The selected language is saved in `localStorage` and persists across sessions.
+
+### Adding Translations
+
+Edit `lib/i18n.ts` to add or modify translations. The structure follows a nested object pattern for easy organization.
+
+## 📄 License & Copyright
+
+**Copyright:** © 2024-2025 Eddi Andreé Salazar Matos. All rights reserved.
+
+Omega-Visual and its visual node system are protected under the Berne Convention for the Protection of Literary and Artistic Works.
+
+Patent pending: Visual node composition for low-level programming.  
+First public disclosure: November 16, 2025
 
 ## 🤝 Contributing
 
@@ -111,5 +148,5 @@ This is a private project. For inquiries, contact hello@omega-visual.dev
 
 ---
 
-Built with ❤️ using Omega-Visual (meta)
+Built with ❤️ by Eddi Andreé Salazar Matos using Omega-Visual (meta)
 

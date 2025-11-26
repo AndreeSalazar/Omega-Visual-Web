@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Check, ArrowRight } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 const plans = [
   {
@@ -51,6 +52,8 @@ const plans = [
 ]
 
 export default function Pricing() {
+  const { t } = useI18n()
+  
   return (
     <section id="pricing" className="py-24 bg-gradient-to-b from-background via-surface to-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +63,7 @@ export default function Pricing() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          Start Building Today
+          {t.pricing.title}
         </motion.h2>
 
         <div className="grid md:grid-cols-3 gap-8">

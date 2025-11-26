@@ -3,8 +3,11 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
+import LanguageSwitcher from './LanguageSwitcher'
 
 export default function Navbar() {
+  const { t } = useI18n()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -37,12 +40,12 @@ export default function Navbar() {
             </motion.div>
           </div>
 
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden md:flex items-center space-x-4">
             {[
-              { href: '#features', label: 'Features' },
-              { href: '#use-cases', label: 'Use Cases' },
-              { href: '#pricing', label: 'Pricing' },
-              { href: '#faq', label: 'FAQ' },
+              { href: '#features', label: t.nav.features },
+              { href: '#use-cases', label: t.nav.useCases },
+              { href: '#pricing', label: t.nav.pricing },
+              { href: '#faq', label: t.nav.faq },
             ].map((link) => (
               <motion.a
                 key={link.href}
@@ -54,12 +57,13 @@ export default function Navbar() {
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
               </motion.a>
             ))}
+            <LanguageSwitcher />
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: '0 5px 20px rgba(255, 107, 53, 0.4)' }}
               whileTap={{ scale: 0.95 }}
               className="px-6 py-2 bg-gradient-primary rounded-lg font-semibold text-white relative overflow-hidden group"
             >
-              <span className="relative z-10">Join Beta</span>
+              <span className="relative z-10">{t.nav.joinBeta}</span>
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
                 animate={{ x: ['-100%', '100%'] }}
@@ -87,20 +91,23 @@ export default function Navbar() {
           >
             <div className="px-4 py-4 space-y-4">
               <a href="#features" className="block text-text hover:text-primary">
-                Features
+                {t.nav.features}
               </a>
               <a href="#use-cases" className="block text-text hover:text-primary">
-                Use Cases
+                {t.nav.useCases}
               </a>
               <a href="#pricing" className="block text-text hover:text-primary">
-                Pricing
+                {t.nav.pricing}
               </a>
               <a href="#faq" className="block text-text hover:text-primary">
-                FAQ
+                {t.nav.faq}
               </a>
-              <button className="w-full px-6 py-2 bg-gradient-primary rounded-lg font-semibold text-white">
-                Join Beta
-              </button>
+              <div className="flex items-center gap-2">
+                <LanguageSwitcher />
+                <button className="flex-1 px-6 py-2 bg-gradient-primary rounded-lg font-semibold text-white">
+                  {t.nav.joinBeta}
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

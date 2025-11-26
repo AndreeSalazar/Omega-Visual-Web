@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Quote } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 const testimonials = [
   {
@@ -25,6 +26,8 @@ const testimonials = [
 ]
 
 export default function Testimonials() {
+  const { t } = useI18n()
+  
   return (
     <section className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,7 +37,7 @@ export default function Testimonials() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          What Developers Are Saying
+          {t.testimonials.title}
         </motion.h2>
 
         <div className="grid md:grid-cols-3 gap-8">

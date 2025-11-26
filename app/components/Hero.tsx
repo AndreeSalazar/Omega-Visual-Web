@@ -3,8 +3,10 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check, Code, Zap, Users } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 export default function Hero() {
+  const { t } = useI18n()
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -127,7 +129,7 @@ export default function Hero() {
           >
             🔥
           </motion.span>
-          <span className="text-sm font-semibold text-text">Featured on Hacker News</span>
+          <span className="text-sm font-semibold text-text">{t.hero.badge}</span>
         </motion.div>
 
         {/* Main Title */}
@@ -151,7 +153,7 @@ export default function Hero() {
               backgroundSize: '200% 200%',
             }}
           >
-            The Operating System
+            {t.hero.title1}
           </motion.span>
           <motion.span
             className="text-gradient block mt-2"
@@ -159,7 +161,7 @@ export default function Hero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
           >
-            for Code
+            {t.hero.title2}
           </motion.span>
         </motion.h1>
 
@@ -168,11 +170,9 @@ export default function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="text-xl md:text-2xl text-text/80 mb-12 max-w-3xl mx-auto"
+          className="text-xl md:text-2xl text-text/80 mb-12 max-w-3xl mx-auto whitespace-pre-line"
         >
-          Build compilers, kernels, and optimized software through visual nodes.
-          <br />
-          From Assembly to execution, in real-time.
+          {t.hero.subtitle}
         </motion.p>
 
         {/* Trust Badges */}
@@ -183,9 +183,9 @@ export default function Hero() {
           className="flex flex-wrap items-center justify-center gap-4 mb-12"
         >
           {[
-            { icon: Code, text: 'Assembly x86-64', colorClass: 'border-secondary/30 hover:border-secondary/60', iconClass: 'text-secondary' },
-            { icon: Zap, text: 'Multi-language', colorClass: 'border-accent/30 hover:border-accent/60', iconClass: 'text-accent' },
-            { icon: Check, text: 'Real compilation', colorClass: 'border-primary/30 hover:border-primary/60', iconClass: 'text-primary' },
+            { icon: Code, text: t.hero.badge1, colorClass: 'border-secondary/30 hover:border-secondary/60', iconClass: 'text-secondary' },
+            { icon: Zap, text: t.hero.badge2, colorClass: 'border-accent/30 hover:border-accent/60', iconClass: 'text-accent' },
+            { icon: Check, text: t.hero.badge3, colorClass: 'border-primary/30 hover:border-primary/60', iconClass: 'text-primary' },
           ].map((badge, index) => (
             <motion.div
               key={index}
@@ -213,7 +213,7 @@ export default function Hero() {
             <span className="text-gradient">
               {Math.floor(count).toLocaleString()}+
             </span>
-            <span className="text-text/60">developers on waitlist</span>
+            <span className="text-text/60">{t.hero.counter}</span>
           </div>
         </motion.div>
 
@@ -230,7 +230,7 @@ export default function Hero() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
+              placeholder={t.hero.emailPlaceholder}
               className="flex-1 px-6 py-4 bg-surface border border-text/20 rounded-lg text-text placeholder:text-text/40 focus:outline-none focus:border-primary transition-colors"
               required
             />
@@ -278,7 +278,7 @@ export default function Hero() {
               animate={{ opacity: 1 }}
               className="mt-4 text-sm text-primary"
             >
-              ✓ Check your inbox for confirmation!
+              {t.hero.success}
             </motion.p>
           )}
         </motion.form>
@@ -290,7 +290,7 @@ export default function Hero() {
           transition={{ delay: 0.8 }}
           className="text-sm text-text/60"
         >
-          Early beta users get lifetime PRO discount (50% off)
+          {t.hero.earlyAccess}
         </motion.p>
       </div>
 

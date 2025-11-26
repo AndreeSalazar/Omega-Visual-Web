@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 const features = [
   {
@@ -47,6 +48,8 @@ const features = [
 ]
 
 export default function Features() {
+  const { t } = useI18n()
+  
   return (
     <section id="features" className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +59,7 @@ export default function Features() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          Enterprise-Grade Features
+          {t.features.title}
         </motion.h2>
 
         <div className="grid md:grid-cols-2 gap-6">

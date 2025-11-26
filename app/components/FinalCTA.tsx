@@ -3,8 +3,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 export default function FinalCTA() {
+  const { t } = useI18n()
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -34,7 +36,7 @@ export default function FinalCTA() {
           viewport={{ once: true }}
           className="text-5xl md:text-6xl font-black mb-6 text-gradient"
         >
-          Join the Revolution in System Development
+          {t.finalCTA.title}
         </motion.h2>
 
         <motion.p
@@ -44,7 +46,7 @@ export default function FinalCTA() {
           transition={{ delay: 0.1 }}
           className="text-xl md:text-2xl text-text/80 mb-12"
         >
-          10,000+ developers are already on the waitlist. Don't miss the future of code.
+          {t.finalCTA.subtitle}
         </motion.p>
 
         <motion.form
@@ -60,7 +62,7 @@ export default function FinalCTA() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
+              placeholder={t.hero.emailPlaceholder}
               className="flex-1 px-6 py-4 bg-surface border border-text/20 rounded-lg text-text placeholder:text-text/40 focus:outline-none focus:border-primary transition-colors"
               required
             />
@@ -72,15 +74,15 @@ export default function FinalCTA() {
               className="px-8 py-4 bg-gradient-primary rounded-lg font-semibold text-white flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isSubmitting ? (
-                'Requesting...'
+                t.finalCTA.requesting
               ) : submitted ? (
                 <>
                   <Check size={20} />
-                  Requested!
+                  {t.finalCTA.requested}
                 </>
               ) : (
                 <>
-                  Request Private Beta Access
+                  {t.finalCTA.cta}
                   <ArrowRight size={20} />
                 </>
               )}
@@ -92,7 +94,7 @@ export default function FinalCTA() {
               animate={{ opacity: 1 }}
               className="mt-4 text-sm text-primary"
             >
-              ✓ Check your inbox for confirmation!
+              {t.finalCTA.success}
             </motion.p>
           )}
         </motion.form>
@@ -104,7 +106,7 @@ export default function FinalCTA() {
           transition={{ delay: 0.3 }}
           className="text-sm text-text/60 mb-8"
         >
-          Early beta users get lifetime PRO discount (50% off)
+          {t.finalCTA.earlyAccess}
         </motion.p>
 
         {/* Social proof */}
@@ -115,7 +117,7 @@ export default function FinalCTA() {
           transition={{ delay: 0.4 }}
           className="text-sm text-text/40"
         >
-          Trusted by teams at{' '}
+          {t.finalCTA.trusted}{' '}
           <span className="text-text/60">[Tech Co] [AI Labs] [Security Inc]</span>
         </motion.div>
       </div>

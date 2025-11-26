@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
+import { I18nProvider } from '@/lib/i18n-context'
+import LangWrapper from './components/LangWrapper'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -35,7 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
-        {children}
+        <I18nProvider>
+          <LangWrapper>
+            {children}
+          </LangWrapper>
+        </I18nProvider>
       </body>
     </html>
   )

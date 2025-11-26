@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 const faqs = [
   {
@@ -37,6 +38,7 @@ const faqs = [
 ]
 
 export default function FAQ() {
+  const { t } = useI18n()
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
@@ -48,7 +50,7 @@ export default function FAQ() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          Frequently Asked Questions
+          {t.faq.title}
         </motion.h2>
 
         <div className="space-y-4">

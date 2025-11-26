@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Check, Wrench, Clock, Sparkles } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 const milestones = [
   {
@@ -42,6 +43,8 @@ const milestones = [
 ]
 
 export default function Roadmap() {
+  const { t } = useI18n()
+  
   return (
     <section className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,7 +54,7 @@ export default function Roadmap() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          The Future of Omega-Visual
+          {t.roadmap.title}
         </motion.h2>
 
         <div className="relative">

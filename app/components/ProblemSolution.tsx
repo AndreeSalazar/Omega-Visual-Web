@@ -2,47 +2,49 @@
 
 import { motion } from 'framer-motion'
 import { FileText, Link2, Users, Network, Code2, Zap } from 'lucide-react'
-
-const problems = [
-  {
-    icon: FileText,
-    title: 'Assembly is Text',
-    description: 'Escribes 5,000 líneas en Vim. Si algo falla, buscas manualmente en archivos dispersos.',
-  },
-  {
-    icon: Link2,
-    title: 'Composition is Manual',
-    description: 'Macros, includes, headers. Cada cambio = recompilar todo. Git conflicts infinitos.',
-  },
-  {
-    icon: Users,
-    title: 'Teams Work in Silos',
-    description: 'Desarrollador A espera que B termine. Merge hell. 2 horas de overhead por 10 líneas.',
-  },
-]
-
-const solutions = [
-  {
-    icon: Network,
-    title: 'Visual Nodes',
-    description: 'Cada archivo es un nodo. Doble-click para editar. Conexiones muestran dependencias.',
-    image: 'canvas-nodes',
-  },
-  {
-    icon: Code2,
-    title: 'Houdini-Style Composition',
-    description: '{{node_name}} hereda código upstream. Dual-view: Raw vs Composed. Automático.',
-    image: 'placeholder-composition',
-  },
-  {
-    icon: Zap,
-    title: 'Real-Time Collaboration',
-    description: 'Ve cursores de tu equipo. Conecta nodos en vivo. Run All = compila en cada PC.',
-    image: 'collaboration',
-  },
-]
+import { useI18n } from '@/lib/i18n-context'
 
 export default function ProblemSolution() {
+  const { t } = useI18n()
+  
+  const problems = [
+    {
+      icon: FileText,
+      title: t.problemSolution.problems[0].title,
+      description: t.problemSolution.problems[0].description,
+    },
+    {
+      icon: Link2,
+      title: t.problemSolution.problems[1].title,
+      description: t.problemSolution.problems[1].description,
+    },
+    {
+      icon: Users,
+      title: t.problemSolution.problems[2].title,
+      description: t.problemSolution.problems[2].description,
+    },
+  ]
+
+  const solutions = [
+    {
+      icon: Network,
+      title: t.problemSolution.solutions[0].title,
+      description: t.problemSolution.solutions[0].description,
+      image: 'canvas-nodes',
+    },
+    {
+      icon: Code2,
+      title: t.problemSolution.solutions[1].title,
+      description: t.problemSolution.solutions[1].description,
+      image: 'placeholder-composition',
+    },
+    {
+      icon: Zap,
+      title: t.problemSolution.solutions[2].title,
+      description: t.problemSolution.solutions[2].description,
+      image: 'collaboration',
+    },
+  ]
   return (
     <section className="relative py-24 bg-gradient-to-b from-background via-surface to-background">
       {/* Problems Section */}
@@ -53,7 +55,7 @@ export default function ProblemSolution() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          System Development is Broken
+          {t.problemSolution.problemTitle}
         </motion.h2>
 
         <div className="grid md:grid-cols-3 gap-8">
@@ -119,7 +121,7 @@ export default function ProblemSolution() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          Omega-Visual Changes Everything
+          {t.problemSolution.solutionTitle}
         </motion.h2>
 
         <div className="grid md:grid-cols-3 gap-8">

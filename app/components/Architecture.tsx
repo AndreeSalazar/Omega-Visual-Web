@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useI18n } from '@/lib/i18n-context'
 
 const stackLayers = [
   { name: 'C++ / Vulkan / Qt (Desktop)', description: 'Visual Editor' },
@@ -12,6 +13,8 @@ const stackLayers = [
 const technologies = ['C++20', 'Vulkan', 'Qt6', 'NASM', 'GCC', 'LLVM', 'CMake']
 
 export default function Architecture() {
+  const { t } = useI18n()
+  
   return (
     <section className="py-24 bg-gradient-to-b from-background via-surface to-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,7 +24,7 @@ export default function Architecture() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          Powered by Modern Tech
+          {t.architecture.title}
         </motion.h2>
 
         <div className="max-w-4xl mx-auto">

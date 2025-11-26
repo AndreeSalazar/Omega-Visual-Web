@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Check, X, AlertCircle } from 'lucide-react'
+import { useI18n } from '@/lib/i18n-context'
 
 const comparisonData = [
   {
@@ -71,6 +72,8 @@ const renderCell = (value: boolean | string | 'coming') => {
 }
 
 export default function Comparison() {
+  const { t } = useI18n()
+  
   return (
     <section className="py-24 bg-gradient-to-b from-background via-surface to-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,7 +83,7 @@ export default function Comparison() {
           viewport={{ once: true }}
           className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
         >
-          Why Omega-Visual Wins
+          {t.comparison.title}
         </motion.h2>
 
         <div className="overflow-x-auto">
@@ -125,11 +128,11 @@ export default function Comparison() {
           viewport={{ once: true }}
           className="text-center mt-8"
         >
-          <a
+            <a
             href="#"
             className="text-secondary hover:text-primary transition-colors inline-flex items-center gap-2"
           >
-            See the full comparison →
+            {t.comparison.seeFull}
           </a>
         </motion.div>
       </div>
