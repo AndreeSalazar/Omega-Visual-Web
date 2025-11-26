@@ -19,7 +19,11 @@ export default function Roadmap() {
   const { t, locale } = useI18n()
   
   return (
-    <section className="py-24 bg-gradient-to-b from-background via-surface to-background relative overflow-hidden">
+    <section className="py-32 bg-gradient-to-b from-background via-surface/50 to-background relative overflow-hidden">
+      {/* Enhanced background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(224,231,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(224,231,255,0.1)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <motion.div

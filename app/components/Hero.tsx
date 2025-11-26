@@ -105,13 +105,13 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-20">
           {/* Main Title */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 100, damping: 15 }}
-            className="text-6xl md:text-8xl lg:text-9xl font-black mb-8 leading-[1.1]"
+            className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 leading-[1.05] tracking-tight"
           >
             <motion.span
               className="text-gradient block mb-2"
@@ -154,7 +154,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
-            className="flex flex-wrap items-center justify-center gap-6 mb-20"
+            className="flex flex-wrap items-center justify-center gap-6 mb-24"
           >
           {[
             { icon: Code, text: t.hero.badge1, colorClass: 'border-secondary/40 hover:border-secondary/80', iconClass: 'text-secondary', glow: 'glow-secondary' },

@@ -765,7 +765,11 @@ export default function InteractiveDemo() {
   }
 
   return (
-    <section id="demo" className="py-24 bg-gradient-to-b from-background via-surface/30 to-background relative overflow-hidden">
+    <section id="demo" className="py-32 bg-gradient-to-b from-background via-surface/50 to-background relative overflow-hidden">
+      {/* Enhanced background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(224,231,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(224,231,255,0.1)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      </div>
       {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -779,10 +783,13 @@ export default function InteractiveDemo() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <motion.h2
-            className="text-4xl md:text-6xl font-black mb-4 text-gradient"
+            className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 text-gradient tracking-tight"
+            style={{
+              textShadow: '0 4px 40px rgba(0, 217, 255, 0.3)',
+            }}
           >
             {t.demo.title}
           </motion.h2>

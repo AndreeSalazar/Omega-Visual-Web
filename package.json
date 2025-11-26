@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:gh-pages": "node -e \"process.env.GITHUB_PAGES='true'; require('child_process').spawnSync('npm', ['run', 'build'], {stdio: 'inherit', shell: true, env: {...process.env}})\"",
     "export": "next build",
     "start": "next start",
     "lint": "next lint",
-    "verify-video": "node scripts/verify-video.js"
+    "verify-video": "node scripts/verify-video.js",
+    "postbuild": "node scripts/create-nojekyll.js"
   },
   "dependencies": {
     "next": "14.2.5",

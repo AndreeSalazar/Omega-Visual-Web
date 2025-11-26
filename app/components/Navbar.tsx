@@ -23,9 +23,9 @@ export default function Navbar() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled 
-          ? 'bg-background/90 backdrop-blur-xl border-b border-surface/50 shadow-lg shadow-primary/5' 
+          ? 'bg-background/95 backdrop-blur-2xl border-b border-surface/60 shadow-2xl shadow-primary/10' 
           : 'bg-transparent'
       }`}
     >

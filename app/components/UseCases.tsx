@@ -17,13 +17,10 @@ export default function UseCases() {
   const { t } = useI18n()
   
   return (
-    <section id="use-cases" className="py-24 bg-gradient-to-b from-background via-surface/30 to-background relative overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(0,255,255,0.3) 1px, transparent 0)',
-          backgroundSize: '50px 50px',
-        }} />
+    <section id="use-cases" className="py-32 bg-gradient-to-b from-background via-surface/40 to-background relative overflow-hidden">
+      {/* Enhanced background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(224,231,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(224,231,255,0.1)_1px,transparent_1px)] bg-[size:60px_60px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -31,10 +28,13 @@ export default function UseCases() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-24"
         >
           <motion.h2
-            className="text-4xl md:text-6xl font-black mb-4 text-gradient"
+            className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 text-gradient tracking-tight"
+            style={{
+              textShadow: '0 4px 40px rgba(0, 217, 255, 0.3)',
+            }}
           >
             {t.useCases.title}
           </motion.h2>
@@ -43,7 +43,7 @@ export default function UseCases() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-text/60 text-lg max-w-3xl mx-auto"
+            className="text-text/70 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-medium"
           >
             {t.useCases.subtitle || 'Solving complex computing challenges through visual node composition'}
           </motion.p>
@@ -60,7 +60,7 @@ export default function UseCases() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, type: 'spring', stiffness: 100 }}
                 whileHover={{ y: -12, scale: 1.02 }}
-                className="glass-effect p-7 rounded-2xl border-2 border-text/20 hover:border-primary/60 transition-all group relative overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-primary/20"
+                className="glass-effect-premium p-8 rounded-2xl border-2 border-text/20 hover:border-primary/60 transition-all group relative overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-primary/30"
               >
                 {/* Animated gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-secondary/0 group-hover:from-primary/8 group-hover:via-primary/5 group-hover:to-secondary/8 transition-all duration-700" />

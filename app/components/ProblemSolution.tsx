@@ -56,23 +56,27 @@ export default function ProblemSolution() {
     },
   ]
   return (
-    <section className="relative py-24 bg-gradient-to-b from-background via-surface to-background">
+    <section className="relative py-32 bg-gradient-to-b from-background via-surface/50 to-background overflow-hidden">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(224,231,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(224,231,255,0.1)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      </div>
       {/* Problems Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-32">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <motion.h2
-            className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 relative inline-block"
+            className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 relative inline-block tracking-tight"
             style={{
               background: 'linear-gradient(135deg, #E0E7FF 0%, #00D9FF 50%, #4ADE80 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              filter: 'drop-shadow(0 4px 20px rgba(0, 217, 255, 0.4))',
+              filter: 'drop-shadow(0 4px 40px rgba(255, 107, 53, 0.4))',
               letterSpacing: '-0.03em',
               lineHeight: '1.1',
             }}
@@ -160,7 +164,10 @@ export default function ProblemSolution() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
+          className="text-5xl md:text-6xl lg:text-7xl font-black text-center mb-20 text-gradient tracking-tight"
+          style={{
+            textShadow: '0 4px 40px rgba(0, 217, 255, 0.3)',
+          }}
         >
           {t.problemSolution.solutionTitle}
         </motion.h2>
@@ -174,10 +181,10 @@ export default function ProblemSolution() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className={`bg-gradient-to-br from-surface/80 to-background/90 p-8 rounded-2xl border-2 transition-all group relative overflow-hidden shadow-xl hover:shadow-2xl ${
+              className={`glass-effect-premium p-8 rounded-2xl border-2 transition-all group relative overflow-hidden shadow-xl hover:shadow-2xl ${
                 solution.comingSoon 
-                  ? 'border-accent/40 hover:border-accent/70 hover:shadow-accent/20 opacity-90' 
-                  : 'border-secondary/30 hover:border-secondary/70 hover:shadow-secondary/20'
+                  ? 'border-accent/40 hover:border-accent/70 hover:shadow-accent/30 opacity-90' 
+                  : 'border-secondary/30 hover:border-secondary/70 hover:shadow-secondary/30'
               }`}
             >
               {/* Coming Soon Badge - Creative Design */}

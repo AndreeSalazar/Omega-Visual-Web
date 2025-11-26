@@ -7,8 +7,17 @@ import { useI18n } from '@/lib/i18n-context'
 export default function Features() {
   const { t, locale } = useI18n()
   
+  // Helper function to safely check if comingSoon exists and is true
+  const isComingSoon = (feature: typeof t.features.items[number]): boolean => {
+    return 'comingSoon' in feature && Boolean((feature as Record<string, unknown>).comingSoon)
+  }
+  
   return (
-    <section id="features" className="py-24 bg-gradient-to-b from-background via-surface/30 to-background relative overflow-hidden">
+    <section id="features" className="py-32 bg-gradient-to-b from-background via-surface/40 to-background relative overflow-hidden">
+      {/* Enhanced background pattern */}
+      <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(224,231,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(224,231,255,0.1)_1px,transparent_1px)] bg-[size:60px_60px]" />
+      </div>
       {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -22,10 +31,13 @@ export default function Features() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-20"
+          className="text-center mb-24"
         >
           <motion.h2
-            className="text-4xl md:text-6xl font-black mb-4 text-gradient"
+            className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 text-gradient tracking-tight"
+            style={{
+              textShadow: '0 4px 40px rgba(0, 217, 255, 0.3)',
+            }}
           >
             {t.features.title}
           </motion.h2>
@@ -34,7 +46,7 @@ export default function Features() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-text/60 text-lg max-w-2xl mx-auto"
+            className="text-text/70 text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed font-medium"
           >
             {t.features.subtitle}
           </motion.p>
@@ -49,22 +61,22 @@ export default function Features() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.08, type: 'spring', stiffness: 100 }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className={`flex gap-5 glass-effect p-7 rounded-2xl border-2 transition-all group relative overflow-hidden ${
-                feature.comingSoon
-                  ? 'border-primary/60 hover:border-primary/90 bg-gradient-to-br from-primary/10 via-surface/60 to-secondary/10 shadow-2xl shadow-primary/20 hover:shadow-primary/30'
-                  : 'border-text/20 hover:border-primary/60 bg-surface/40 hover:bg-surface/60 shadow-xl hover:shadow-2xl'
+              className={`flex gap-5 glass-effect-premium p-8 rounded-2xl border-2 transition-all group relative overflow-hidden ${
+                isComingSoon(feature)
+                  ? 'border-primary/60 hover:border-primary/90 bg-gradient-to-br from-primary/10 via-surface/60 to-secondary/10 shadow-2xl shadow-primary/20 hover:shadow-primary/40'
+                  : 'border-text/20 hover:border-primary/60 bg-surface/50 hover:bg-surface/70 shadow-xl hover:shadow-2xl hover:shadow-primary/10'
               }`}
             >
               {/* Animated gradient overlay */}
               <div className={`absolute inset-0 bg-gradient-to-r transition-all duration-700 ${
-                feature.comingSoon
+                isComingSoon(feature)
                   ? 'from-primary/15 via-secondary/8 to-primary/15 group-hover:from-primary/20 group-hover:via-secondary/12 group-hover:to-primary/20'
                   : 'from-primary/0 via-primary/0 to-primary/0 group-hover:from-primary/8 group-hover:via-primary/5 group-hover:to-primary/8'
               }`} />
               
               {/* Subtle corner accent */}
               <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${
-                feature.comingSoon
+                isComingSoon(feature)
                   ? 'from-primary/20 to-transparent'
                   : 'from-primary/5 to-transparent'
               } opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl`} />
@@ -75,24 +87,24 @@ export default function Features() {
                     whileHover={{ rotate: 360, scale: 1.15 }}
                     transition={{ duration: 0.6, type: 'spring' }}
                     className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all shadow-lg ${
-                      feature.comingSoon
+                      isComingSoon(feature)
                         ? 'bg-gradient-to-br from-secondary/50 to-secondary/70 border-2 border-primary/70 shadow-primary/30'
                         : 'bg-gradient-to-br from-primary/30 to-primary/50 border-2 border-primary/40 group-hover:border-primary/60 group-hover:glow-primary'
                     }`}
                   >
-                    <Check className={`${feature.comingSoon ? 'text-white' : 'text-white'}`} size={26} strokeWidth={3} />
+                    <Check className="text-white" size={26} strokeWidth={3} />
                   </motion.div>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-3 mb-3 flex-wrap">
                     <h3 className={`text-xl font-bold transition-colors leading-tight ${
-                      feature.comingSoon 
+                      isComingSoon(feature) 
                         ? 'text-primary group-hover:text-primary/90' 
                         : 'text-text group-hover:text-primary'
                     }`}>
                       {feature.title}
                     </h3>
-                    {feature.comingSoon && (
+                    {isComingSoon(feature) && (
                       <motion.span
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -144,7 +156,7 @@ export default function Features() {
                     )}
                   </div>
                   <p className={`text-base leading-relaxed transition-colors ${
-                    feature.comingSoon 
+                    isComingSoon(feature) 
                       ? 'text-text/85 group-hover:text-text/100' 
                       : 'text-text/75 group-hover:text-text/95'
                   }`}>
