@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { I18nProvider } from '@/lib/i18n-context'
 import LangWrapper from './components/LangWrapper'
+import LanguagePrompt from './components/LanguagePrompt'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <I18nProvider>
           <LangWrapper>
+            <LanguagePrompt />
             {children}
           </LangWrapper>
         </I18nProvider>

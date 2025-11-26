@@ -11,6 +11,14 @@ export const translations = {
       useCases: 'Use Cases',
       joinBeta: 'Join Beta',
     },
+    // Language Prompt
+    languagePrompt: {
+      title: 'Do you want to change language?',
+      subtitle: 'Switch language now for a better experience',
+      keepCurrent: 'Keep in English',
+      switchTo: 'Yes, I do',
+      close: 'Close',
+    },
     // Hero
     hero: {
       badge: 'Featured on Hacker News',
@@ -480,6 +488,14 @@ export const translations = {
       features: 'Características',
       useCases: 'Casos de Uso',
       joinBeta: 'Únete a Beta',
+    },
+    // Language Prompt
+    languagePrompt: {
+      title: '¿Quieres cambiar a inglés?',
+      subtitle: 'Cambia el idioma ahora para una mejor experiencia',
+      keepCurrent: 'Mantener en español',
+      switchTo: 'Sí, cambiar',
+      close: 'Cerrar',
     },
     // Hero
     hero: {
