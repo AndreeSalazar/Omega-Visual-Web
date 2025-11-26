@@ -1,3 +1,7 @@
 # Videos folder
-# Place your hero video here: hero-demo.mp4
-
+# Place your hero video here: Video-01.mp4
+# 
+# IMPORTANT for GitHub Pages:
+# - The video file must be in this folder
+# - File name must be exactly: Video-01.mp4
+# - After build, the video will be available at: /Omega-Visual-Web/videos/Video-01.mp4

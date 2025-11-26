@@ -7,7 +7,8 @@
     "build": "next build",
     "export": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify-video": "node scripts/verify-video.js"
   },
   "dependencies": {
     "next": "14.2.5",

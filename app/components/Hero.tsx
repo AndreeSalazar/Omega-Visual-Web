@@ -4,11 +4,18 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Code, Zap, Check, Play, ArrowRight } from 'lucide-react'
 import { useI18n } from '@/lib/i18n-context'
+import { getAssetPath } from '@/lib/utils'
 
 export default function Hero() {
   const { t } = useI18n()
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoPath, setVideoPath] = useState('')
+  
+  // Get video path on client side to ensure correct basePath
+  useEffect(() => {
+    setVideoPath(getAssetPath('videos/Video-01.mp4'))
+  }, [])
 
 
   const handlePlayVideo = () => {
@@ -228,8 +235,11 @@ export default function Hero() {
                             video.currentTime = video.duration * 0.1 // 10% into video
                           }
                         }}
+                        onError={(e) => {
+                          console.warn('Video thumbnail failed to load:', e)
+                        }}
                       >
-                        <source src="/videos/Video-01.mp4" type="video/mp4" />
+                        <source src={videoPath || getAssetPath('videos/Video-01.mp4')} type="video/mp4" />
                       </video>
                       
                       {/* Professional gradient overlays */}
@@ -358,11 +368,30 @@ export default function Hero() {
                       controls={false}
                       onLoadedData={() => {
                         if (videoRef.current) {
-                          videoRef.current.play().catch(console.error)
+                          videoRef.current.play().catch((err) => {
+                            console.error('Video play error:', err)
+                          })
+                        }
+                      }}
+                      onError={(e) => {
+                        console.error('Video failed to load:', e)
+                        // Show error message to user
+                        const video = e.target as HTMLVideoElement
+                        const parent = video.parentElement
+                        if (parent) {
+                          const errorDiv = document.createElement('div')
+                          errorDiv.className = 'absolute inset-0 flex flex-col items-center justify-center bg-black/90 text-white p-8'
+                          errorDiv.innerHTML = `
+                            <div class="text-4xl mb-4">⚠️</div>
+                            <p class="text-xl mb-2">Video no encontrado</p>
+                            <p class="text-sm text-white/60">Asegúrate de que Video-01.mp4 esté en /public/videos/</p>
+                            <p class="text-xs text-white/40 mt-2">Ruta esperada: ${getAssetPath('videos/Video-01.mp4')}</p>
+                          `
+                          parent.appendChild(errorDiv)
                         }
                       }}
                     >
-                      <source src="/videos/Video-01.mp4" type="video/mp4" />
+                      <source src={videoPath || getAssetPath('videos/Video-01.mp4')} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                     
