@@ -40,22 +40,6 @@ A stunning, modern landing page for Omega-Visual - "The Operating System for Cod
 - **Framer Motion** - Animation library
 - **Lucide React** - Icon library
 
-## 📦 Installation
-
-```bash
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-```
-
 ## 🎨 Color Palette
 
 - **Primary**: `#FF6B35` (Orange - Assembly)
@@ -73,39 +57,6 @@ Edit `tailwind.config.ts` to change the color scheme.
 ### Add Sections
 Create new components in `app/components/` and import them in `app/page.tsx`.
 
-### Modify Content
-Each component is self-contained. Edit the data arrays in each component file.
-
-## 🚢 Deployment
-
-### GitHub Pages (✅ Configured & Ready)
-
-This project is **fully configured** for GitHub Pages deployment:
-
-1. ✅ Push code to GitHub repository named `Omega-Visual-Web`
-2. ✅ Enable GitHub Pages in Settings → Pages
-3. ✅ Select **"GitHub Actions"** as source (NOT "Deploy from a branch")
-4. ✅ The workflow (`.github/workflows/deploy.yml`) will automatically deploy on push to `main`
-
-**URL Format:** `https://[username].github.io/Omega-Visual-Web/`
-
-**Build Status:** ✅ Tested and working - `npm run build` completes successfully
-
-See [DEPLOY.md](./DEPLOY.md) for detailed step-by-step deployment instructions.
-
-### Vercel (Alternative)
-
-1. Push to GitHub
-2. Import project in Vercel
-3. Deploy automatically
-
-### Netlify (Alternative)
-
-1. Push to GitHub
-2. Connect to Netlify
-3. Build command: `npm run build`
-4. Publish directory: `out`
-
 ## 📊 Performance
 
 - Lighthouse score target: 95+
@@ -113,13 +64,6 @@ See [DEPLOY.md](./DEPLOY.md) for detailed step-by-step deployment instructions.
 - Code splitting with dynamic imports
 - Lazy loading for videos and heavy components
 
-## 🔧 Environment Variables
-
-Create a `.env.local` file for any API keys (email service, analytics, etc.):
-
-```env
-NEXT_PUBLIC_EMAIL_SERVICE_API_KEY=your_key_here
-```
 
 ## 🌍 Internationalization (i18n)
 
@@ -131,9 +75,6 @@ The site supports two languages:
 
 A language switcher is available in the navbar. The selected language is saved in `localStorage` and persists across sessions.
 
-### Adding Translations
-
-Edit `lib/i18n.ts` to add or modify translations. The structure follows a nested object pattern for easy organization.
 
 ## 📄 License & Copyright
 
@@ -146,7 +87,7 @@ First public disclosure: November 16, 2025
 
 ## 🤝 Contributing
 
-This is a private project. For inquiries, contact hello@omega-visual.dev
+This is a private project. For inquiries, contact eddi.salazar.dev@gmail.com
 
 ---
 

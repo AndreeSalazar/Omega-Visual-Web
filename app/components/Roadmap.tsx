@@ -225,7 +225,7 @@ export default function Roadmap() {
                       <p className="text-text/70 text-sm leading-relaxed mb-2">
                         {milestone.description}
                       </p>
-                      {milestone.note && (
+                      {'note' in milestone && milestone.note && (
                         <p className="text-text/50 text-xs italic border-t border-text/10 pt-2 mt-2">
                           {milestone.note}
                         </p>
