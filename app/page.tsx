@@ -5,10 +5,9 @@ import InteractiveDemo from './components/InteractiveDemo'
 import UseCases from './components/UseCases'
 import Features from './components/Features'
 import Comparison from './components/Comparison'
-import Testimonials from './components/Testimonials'
 import Architecture from './components/Architecture'
 import Roadmap from './components/Roadmap'
-import FinalCTA from './components/FinalCTA'
+import ComingSoonAI from './components/ComingSoonAI'
 import Footer from './components/Footer'
 
 export default function Home() {
@@ -21,10 +20,9 @@ export default function Home() {
       <UseCases />
       <Features />
       <Comparison />
-      <Testimonials />
       <Architecture />
       <Roadmap />
-      <FinalCTA />
+      <ComingSoonAI />
       <Footer />
     </main>
   )

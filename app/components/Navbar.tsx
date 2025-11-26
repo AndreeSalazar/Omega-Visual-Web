@@ -56,18 +56,6 @@ export default function Navbar() {
               </motion.a>
             ))}
             <LanguageSwitcher />
-            <motion.button
-              whileHover={{ scale: 1.05, boxShadow: '0 5px 20px rgba(255, 107, 53, 0.4)' }}
-              whileTap={{ scale: 0.95 }}
-              className="px-6 py-2 bg-gradient-primary rounded-lg font-semibold text-white relative overflow-hidden group"
-            >
-              <span className="relative z-10">{t.nav.joinBeta}</span>
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                animate={{ x: ['-100%', '100%'] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-              />
-            </motion.button>
           </div>
 
           <button
@@ -94,12 +82,7 @@ export default function Navbar() {
               <a href="#use-cases" className="block text-text hover:text-primary">
                 {t.nav.useCases}
               </a>
-              <div className="flex items-center gap-2">
-                <LanguageSwitcher />
-                <button className="flex-1 px-6 py-2 bg-gradient-primary rounded-lg font-semibold text-white">
-                  {t.nav.joinBeta}
-                </button>
-              </div>
+              <LanguageSwitcher />
             </div>
           </motion.div>
         )}

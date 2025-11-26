@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Play, Terminal } from 'lucide-react'
+import { Play, Terminal, Settings2 } from 'lucide-react'
 import { useI18n } from '@/lib/i18n-context'
 
 interface Node {
@@ -12,15 +12,16 @@ interface Node {
   label: string
   code: string
   connections: string[]
+  isDragging?: boolean
 }
 
 const initialNodes: Node[] = [
   {
-    id: 'boot',
-    x: 150,
-    y: 200,
-    label: 'boot.asm',
-    code: `; Bootloader entry point
+    id: 'hello_world',
+    x: 200,
+    y: 150,
+    label: 'hello_world.asm',
+    code: `; Hello World Bootloader
 global _start
 _start:
     mov ax, 0x07C0
@@ -44,27 +45,22 @@ msg db 'Hello, World!', 0`,
   },
   {
     id: 'kernel',
-    x: 400,
-    y: 200,
+    x: 450,
+    y: 150,
     label: 'kernel.asm',
     code: `; Kernel initialization
 section .text
 global kernel_main
 
 kernel_main:
-    ; Initialize stack
     mov esp, stack_top
-    
-    ; Print welcome message
     mov esi, welcome_msg
     call print_string
-    
-    ; Enter main loop
     jmp main_loop
 
 print_string:
-    mov edi, 0xB8000  ; VGA buffer
-    mov ah, 0x0F      ; White on black
+    mov edi, 0xB8000
+    mov ah, 0x0F
 .loop:
     lodsb
     test al, al
@@ -80,8 +76,8 @@ stack_top:`,
   },
   {
     id: 'output',
-    x: 650,
-    y: 200,
+    x: 700,
+    y: 150,
     label: 'Output',
     code: `; Compiled output
 ; Binary: hello_world.bin
@@ -89,7 +85,7 @@ stack_top:`,
 ; Status: Success
 
 Execution result:
-> Compiling boot.asm...
+> Compiling hello_world.asm...
 > Compiling kernel.asm...
 > Linking...
 > Success!
@@ -101,9 +97,12 @@ Execution result:
 
 export default function InteractiveDemo() {
   const { t } = useI18n()
-  const [selectedNode, setSelectedNode] = useState<Node | null>(initialNodes[0])
+  const [nodes, setNodes] = useState<Node[]>(initialNodes)
+  const [selectedNode, setSelectedNode] = useState<Node | null>(nodes[0])
   const [isRunning, setIsRunning] = useState(false)
   const [terminalOutput, setTerminalOutput] = useState('')
+  const [draggedNode, setDraggedNode] = useState<string | null>(null)
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -136,9 +135,9 @@ export default function InteractiveDemo() {
       }
 
       // Draw connections
-      initialNodes.forEach((node, nodeIndex) => {
+      nodes.forEach((node, nodeIndex) => {
         node.connections.forEach((targetId) => {
-          const target = initialNodes.find((n) => n.id === targetId)
+          const target = nodes.find((n) => n.id === targetId)
           if (target) {
             drawConnection(ctx, node, target, nodeIndex)
           }
@@ -152,14 +151,13 @@ export default function InteractiveDemo() {
           return p.progress < 1
         })
 
-        // Add new particles
         if (particles.length < 10) {
-          initialNodes.forEach((node, nodeIndex) => {
+          nodes.forEach((node, nodeIndex) => {
             node.connections.forEach(() => {
               if (Math.random() > 0.7) {
                 particles.push({
-                  x: node.x + 60,
-                  y: node.y,
+                  x: node.x + 80,
+                  y: node.y + 20,
                   progress: 0,
                   connectionIndex: nodeIndex,
                 })
@@ -169,18 +167,17 @@ export default function InteractiveDemo() {
         }
 
         particles.forEach((particle) => {
-          const node = initialNodes[particle.connectionIndex]
-          const target = initialNodes.find((n) => node.connections.includes(n.id))
+          const node = nodes[particle.connectionIndex]
+          const target = nodes.find((n) => node.connections.includes(n.id))
           if (target) {
-            const startX = node.x + 60
-            const startY = node.y
-            const endX = target.x - 60
-            const endY = target.y
+            const startX = node.x + 80
+            const startY = node.y + 20
+            const endX = target.x - 80
+            const endY = target.y + 20
 
             const currentX = startX + (endX - startX) * particle.progress
             const currentY = startY + (endY - startY) * particle.progress
 
-            // Draw particle with glow
             const gradient = ctx.createRadialGradient(currentX, currentY, 0, currentX, currentY, 8)
             gradient.addColorStop(0, 'rgba(0, 217, 255, 1)')
             gradient.addColorStop(0.5, 'rgba(0, 217, 255, 0.5)')
@@ -195,7 +192,7 @@ export default function InteractiveDemo() {
       }
 
       // Draw nodes
-      initialNodes.forEach((node) => {
+      nodes.forEach((node) => {
         drawNode(ctx, node, node === selectedNode)
       })
 
@@ -204,20 +201,40 @@ export default function InteractiveDemo() {
 
     draw()
 
-    const handleClick = (e: MouseEvent) => {
+    const handleMouseDown = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect()
       const scaleX = canvas.width / rect.width
       const scaleY = canvas.height / rect.height
       const x = (e.clientX - rect.left) * scaleX
       const y = (e.clientY - rect.top) * scaleY
 
-      const clickedNode = initialNodes.find((node) => {
-        const dx = x - node.x
-        const dy = y - node.y
-        return dx * dx + dy * dy < 60 * 60
+      const clickedNode = nodes.find((node) => {
+        const nodeX = node.x - 80
+        const nodeY = node.y - 20
+        return x >= nodeX && x <= nodeX + 160 && y >= nodeY && y <= nodeY + 80
       })
 
       if (clickedNode) {
+        // Check if clicking on play button
+        const playButtonX = clickedNode.x + 50
+        const playButtonY = clickedNode.y - 10
+        const playButtonSize = 20
+        const distToPlay = Math.sqrt(
+          Math.pow(x - playButtonX, 2) + Math.pow(y - playButtonY, 2)
+        )
+
+        if (distToPlay < playButtonSize) {
+          // Clicked play button
+          handleNodePlay(clickedNode.id)
+          return
+        }
+
+        // Start dragging
+        setDraggedNode(clickedNode.id)
+        setDragOffset({
+          x: x - clickedNode.x,
+          y: y - clickedNode.y,
+        })
         setSelectedNode(clickedNode)
       }
     }
@@ -229,29 +246,70 @@ export default function InteractiveDemo() {
       const x = (e.clientX - rect.left) * scaleX
       const y = (e.clientY - rect.top) * scaleY
 
-      const hoveredNode = initialNodes.find((node) => {
-        const dx = x - node.x
-        const dy = y - node.y
-        return dx * dx + dy * dy < 60 * 60
-      })
+      if (draggedNode) {
+        setNodes((prevNodes) =>
+          prevNodes.map((node) =>
+            node.id === draggedNode
+              ? { ...node, x: x - dragOffset.x, y: y - dragOffset.y }
+              : node
+          )
+        )
+      } else {
+        const hoveredNode = nodes.find((node) => {
+          const nodeX = node.x - 80
+          const nodeY = node.y - 20
+          return x >= nodeX && x <= nodeX + 160 && y >= nodeY && y <= nodeY + 80
+        })
 
-      canvas.style.cursor = hoveredNode ? 'pointer' : 'default'
+        if (hoveredNode) {
+          const playButtonX = hoveredNode.x + 50
+          const playButtonY = hoveredNode.y - 10
+          const playButtonSize = 20
+          const distToPlay = Math.sqrt(
+            Math.pow(x - playButtonX, 2) + Math.pow(y - playButtonY, 2)
+          )
+
+          canvas.style.cursor = distToPlay < playButtonSize ? 'pointer' : 'grab'
+        } else {
+          canvas.style.cursor = 'default'
+        }
+      }
     }
 
-    canvas.addEventListener('click', handleClick)
+    const handleMouseUp = () => {
+      setDraggedNode(null)
+    }
+
+    canvas.addEventListener('mousedown', handleMouseDown)
     canvas.addEventListener('mousemove', handleMouseMove)
+    canvas.addEventListener('mouseup', handleMouseUp)
+    canvas.addEventListener('mouseleave', handleMouseUp)
+
     return () => {
-      canvas.removeEventListener('click', handleClick)
+      canvas.removeEventListener('mousedown', handleMouseDown)
       canvas.removeEventListener('mousemove', handleMouseMove)
+      canvas.removeEventListener('mouseup', handleMouseUp)
+      canvas.removeEventListener('mouseleave', handleMouseUp)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [selectedNode, isRunning])
+  }, [nodes, selectedNode, isRunning, draggedNode, dragOffset])
+
+  const handleNodePlay = (nodeId: string) => {
+    const node = nodes.find((n) => n.id === nodeId)
+    if (node && node.id === 'hello_world') {
+      setIsRunning(true)
+      setTerminalOutput('> Compiling hello_world.asm...\n> Linking...\n')
+      setTimeout(() => {
+        setTerminalOutput((prev) => prev + '> Success!\n> Hello, World!\n')
+        setTimeout(() => setIsRunning(false), 2000)
+      }, 1500)
+    }
+  }
 
   const drawConnection = (ctx: CanvasRenderingContext2D, from: Node, to: Node, index: number) => {
     const isActive = isRunning || (selectedNode && (selectedNode === from || selectedNode === to))
     
-    // Create gradient for connection
-    const gradient = ctx.createLinearGradient(from.x + 60, from.y, to.x - 60, to.y)
+    const gradient = ctx.createLinearGradient(from.x + 80, from.y + 20, to.x - 80, to.y + 20)
     if (isRunning) {
       gradient.addColorStop(0, 'rgba(0, 217, 255, 0.8)')
       gradient.addColorStop(0.5, 'rgba(0, 217, 255, 1)')
@@ -267,45 +325,79 @@ export default function InteractiveDemo() {
     ctx.shadowColor = isRunning ? 'rgba(0, 217, 255, 0.5)' : 'transparent'
     
     ctx.beginPath()
-    ctx.moveTo(from.x + 60, from.y)
+    ctx.moveTo(from.x + 80, from.y + 20)
     ctx.bezierCurveTo(
-      from.x + 100,
-      from.y,
-      to.x - 100,
-      to.y,
-      to.x - 60,
-      to.y
+      from.x + 120,
+      from.y + 20,
+      to.x - 120,
+      to.y + 20,
+      to.x - 80,
+      to.y + 20
     )
     ctx.stroke()
-    
     ctx.shadowBlur = 0
   }
 
   const drawNode = (ctx: CanvasRenderingContext2D, node: Node, isSelected: boolean) => {
-    const x = node.x - 60
-    const y = node.y - 30
-    const width = 120
-    const height = 60
-    const radius = 12
+    const x = node.x - 80
+    const y = node.y - 20
+    const width = 160
+    const height = 80
+    const radius = 8
 
     // Outer glow for selected nodes
     if (isSelected) {
-      ctx.shadowBlur = 20
+      ctx.shadowBlur = 25
       ctx.shadowColor = 'rgba(255, 107, 53, 0.6)'
     }
 
-    // Background gradient
-    const bgGradient = ctx.createLinearGradient(x, y, x + width, y + height)
-    if (isSelected) {
-      bgGradient.addColorStop(0, 'rgba(255, 107, 53, 0.2)')
-      bgGradient.addColorStop(0.5, 'rgba(0, 217, 255, 0.2)')
-      bgGradient.addColorStop(1, 'rgba(255, 107, 53, 0.2)')
-    } else {
-      bgGradient.addColorStop(0, 'rgba(26, 31, 58, 0.9)')
-      bgGradient.addColorStop(1, 'rgba(10, 14, 39, 0.9)')
-    }
+    // Header (orange-brown gradient)
+    const headerHeight = 30
+    const headerGradient = ctx.createLinearGradient(x, y, x, y + headerHeight)
+    headerGradient.addColorStop(0, 'rgba(139, 69, 19, 0.9)')
+    headerGradient.addColorStop(1, 'rgba(101, 50, 14, 0.9)')
 
-    // Draw rounded rectangle
+    ctx.fillStyle = headerGradient
+    ctx.beginPath()
+    ctx.moveTo(x + radius, y)
+    ctx.lineTo(x + width - radius, y)
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius)
+    ctx.lineTo(x + width, y + headerHeight)
+    ctx.lineTo(x, y + headerHeight)
+    ctx.lineTo(x, y + radius)
+    ctx.quadraticCurveTo(x, y, x + radius, y)
+    ctx.closePath()
+    ctx.fill()
+
+    // Body (dark grey)
+    const bodyGradient = ctx.createLinearGradient(x, y + headerHeight, x, y + height)
+    bodyGradient.addColorStop(0, 'rgba(26, 31, 58, 0.95)')
+    bodyGradient.addColorStop(1, 'rgba(10, 14, 39, 0.95)')
+
+    ctx.fillStyle = bodyGradient
+    ctx.beginPath()
+    ctx.moveTo(x, y + headerHeight)
+    ctx.lineTo(x + width, y + headerHeight)
+    ctx.lineTo(x + width, y + height - radius)
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height)
+    ctx.lineTo(x + radius, y + height)
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius)
+    ctx.closePath()
+    ctx.fill()
+
+    // Border
+    const borderGradient = ctx.createLinearGradient(x, y, x + width, y + height)
+    if (isSelected) {
+      borderGradient.addColorStop(0, '#FF6B35')
+      borderGradient.addColorStop(0.5, '#00D9FF')
+      borderGradient.addColorStop(1, '#FF6B35')
+    } else {
+      borderGradient.addColorStop(0, 'rgba(255, 107, 53, 0.5)')
+      borderGradient.addColorStop(1, 'rgba(255, 107, 53, 0.3)')
+    }
+    
+    ctx.strokeStyle = borderGradient
+    ctx.lineWidth = isSelected ? 3 : 2
     ctx.beginPath()
     ctx.moveTo(x + radius, y)
     ctx.lineTo(x + width - radius, y)
@@ -317,52 +409,95 @@ export default function InteractiveDemo() {
     ctx.lineTo(x, y + radius)
     ctx.quadraticCurveTo(x, y, x + radius, y)
     ctx.closePath()
-    
-    ctx.fillStyle = bgGradient
-    ctx.fill()
-    
-    // Border gradient
-    const borderGradient = ctx.createLinearGradient(x, y, x + width, y + height)
-    if (isSelected) {
-      borderGradient.addColorStop(0, '#FF6B35')
-      borderGradient.addColorStop(0.5, '#00D9FF')
-      borderGradient.addColorStop(1, '#FF6B35')
-    } else {
-      borderGradient.addColorStop(0, 'rgba(0, 217, 255, 0.4)')
-      borderGradient.addColorStop(1, 'rgba(255, 107, 53, 0.4)')
-    }
-    
-    ctx.strokeStyle = borderGradient
-    ctx.lineWidth = isSelected ? 3 : 2
     ctx.stroke()
     ctx.shadowBlur = 0
 
-    // Text with shadow
-    ctx.fillStyle = isSelected ? '#FFFFFF' : '#E0E7FF'
-    ctx.font = 'bold 14px Inter'
-    ctx.textAlign = 'center'
+    // Icon in header (left side)
+    ctx.fillStyle = 'rgba(200, 200, 200, 0.8)'
+    ctx.font = 'bold 12px Inter'
+    ctx.textAlign = 'left'
     ctx.textBaseline = 'middle'
-    ctx.shadowBlur = 4
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'
-    ctx.fillText(node.label, node.x, node.y)
-    ctx.shadowBlur = 0
+    const iconX = x + 10
+    const iconY = y + headerHeight / 2
+    // Draw simple gear icon representation
+    ctx.beginPath()
+    ctx.arc(iconX, iconY, 6, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = 'rgba(26, 31, 58, 0.9)'
+    ctx.beginPath()
+    ctx.arc(iconX, iconY, 3, 0, Math.PI * 2)
+    ctx.fill()
+
+    // Label in header
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = 'bold 12px Inter'
+    ctx.textAlign = 'left'
+    ctx.fillText(node.label, x + 25, y + headerHeight / 2)
+
+    // Play button in header (right side)
+    const playButtonX = node.x + 50
+    const playButtonY = node.y - 10
+    const playButtonSize = 18
+    
+    // Play button background (orange-yellow)
+    const playGradient = ctx.createRadialGradient(
+      playButtonX, playButtonY, 0,
+      playButtonX, playButtonY, playButtonSize
+    )
+    playGradient.addColorStop(0, 'rgba(255, 200, 0, 1)')
+    playGradient.addColorStop(1, 'rgba(255, 140, 0, 1)')
+    
+    ctx.fillStyle = playGradient
+    ctx.beginPath()
+    ctx.arc(playButtonX, playButtonY, playButtonSize, 0, Math.PI * 2)
+    ctx.fill()
+    
+    // Play button border
+    ctx.strokeStyle = 'rgba(255, 200, 0, 0.8)'
+    ctx.lineWidth = 2
+    ctx.stroke()
+    
+    // Play triangle
+    ctx.fillStyle = '#000000'
+    ctx.beginPath()
+    ctx.moveTo(playButtonX - 4, playButtonY - 5)
+    ctx.lineTo(playButtonX - 4, playButtonY + 5)
+    ctx.lineTo(playButtonX + 6, playButtonY)
+    ctx.closePath()
+    ctx.fill()
 
     // Connection points
-    const connectionColor = isSelected ? 'rgba(255, 107, 53, 0.8)' : 'rgba(0, 217, 255, 0.5)'
-    // Left connection point
+    const connectionColor = isSelected ? 'rgba(255, 107, 53, 0.9)' : 'rgba(0, 217, 255, 0.6)'
+    
+    // Left connection point (IN)
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
+    ctx.beginPath()
+    ctx.arc(x, node.y + 20, 6, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.strokeStyle = connectionColor
+    ctx.lineWidth = 2
+    ctx.stroke()
+    ctx.fillStyle = '#000000'
+    ctx.font = 'bold 8px Inter'
+    ctx.textAlign = 'center'
+    ctx.fillText('IN', x, node.y + 20)
+    
+    // Right connection point (OUT)
     ctx.fillStyle = connectionColor
     ctx.beginPath()
-    ctx.arc(x, node.y, 4, 0, Math.PI * 2)
+    ctx.arc(x + width, node.y + 20, 6, 0, Math.PI * 2)
     ctx.fill()
-    // Right connection point
-    ctx.beginPath()
-    ctx.arc(x + width, node.y, 4, 0, Math.PI * 2)
-    ctx.fill()
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+    ctx.lineWidth = 1
+    ctx.stroke()
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = 'bold 8px Inter'
+    ctx.fillText('OUT', x + width, node.y + 20)
   }
 
   const handleRun = () => {
     setIsRunning(true)
-    setTerminalOutput('> Compiling boot.asm...\n> Compiling kernel.asm...\n> Linking...\n')
+    setTerminalOutput('> Compiling hello_world.asm...\n> Compiling kernel.asm...\n> Linking...\n')
 
     setTimeout(() => {
       setTerminalOutput((prev) => prev + '> Success!\n> Hello, World!\n> Kernel loaded!\n')
@@ -371,29 +506,41 @@ export default function InteractiveDemo() {
   }
 
   return (
-    <section id="demo" className="py-24 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.h2
+    <section id="demo" className="py-24 bg-gradient-to-b from-background via-surface/30 to-background relative overflow-hidden">
+      {/* Subtle background pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(0,217,255,0.3) 1px, transparent 0)',
+          backgroundSize: '40px 40px',
+        }} />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
+          className="text-center mb-16"
         >
-          {t.demo.title}
-        </motion.h2>
+          <motion.h2
+            className="text-4xl md:text-6xl font-black mb-4 text-gradient"
+          >
+            {t.demo.title}
+          </motion.h2>
+        </motion.div>
 
         <div className="grid lg:grid-cols-5 gap-8">
-          {/* Canvas Section (60%) */}
+          {/* Canvas Section */}
           <div className="lg:col-span-3">
-            <div className="bg-surface rounded-xl p-6 border border-text/10">
+            <div className="glass-effect rounded-2xl p-6 border-2 border-text/20 shadow-2xl">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-text">{t.demo.canvasTitle}</h3>
                 <motion.button
-                  whileHover={{ scale: 1.05, boxShadow: '0 5px 20px rgba(255, 107, 53, 0.4)' }}
+                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleRun}
                   disabled={isRunning}
-                  className="px-5 py-2.5 bg-gradient-primary rounded-lg text-white flex items-center gap-2 disabled:opacity-50 relative overflow-hidden group"
+                  className="px-6 py-3 bg-gradient-primary rounded-lg text-white flex items-center gap-2 disabled:opacity-50 relative overflow-hidden group shadow-lg"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     {isRunning ? (
@@ -407,7 +554,7 @@ export default function InteractiveDemo() {
                       </>
                     ) : (
                       <>
-                        <Play size={16} />
+                        <Play size={18} />
                         {t.demo.runDemo}
                       </>
                     )}
@@ -422,27 +569,27 @@ export default function InteractiveDemo() {
                 </motion.button>
               </div>
 
-              <div className="relative bg-background rounded-lg overflow-hidden border border-text/10">
+              <div className="relative bg-background rounded-lg overflow-hidden border-2 border-text/20">
                 <canvas
                   ref={canvasRef}
-                  width={800}
+                  width={900}
                   height={400}
-                  className="w-full h-auto cursor-pointer"
+                  className="w-full h-auto cursor-grab active:cursor-grabbing"
                 />
                 {!isRunning && (
-                  <div className="absolute top-4 left-4 text-xs text-text/40 font-mono">
-                    Click nodes to view code
+                  <div className="absolute top-4 left-4 text-xs text-text/50 font-mono bg-background/80 px-2 py-1 rounded">
+                    {t.demo.clickNodes || 'Click nodes to view code • Drag to move'}
                   </div>
                 )}
               </div>
 
               {/* Terminal Output */}
-              <div className="mt-4 bg-background rounded-lg p-4 border border-text/10">
+              <div className="mt-4 glass-effect rounded-lg p-4 border border-text/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <Terminal size={16} className="text-secondary" />
-                  <span className="text-sm text-text/60">{t.demo.terminalOutput}</span>
+                  <Terminal size={18} className="text-secondary" />
+                  <span className="text-sm font-semibold text-text">{t.demo.terminalOutput}</span>
                 </div>
-                <pre className="text-sm text-text/80 font-mono whitespace-pre-wrap">
+                <pre className="text-sm text-text/80 font-mono whitespace-pre-wrap min-h-[80px]">
                   {terminalOutput ? (
                     terminalOutput.split('\n').map((line, i) => (
                       <motion.span
@@ -463,13 +610,14 @@ export default function InteractiveDemo() {
             </div>
           </div>
 
-          {/* Code Panel (40%) */}
+          {/* Code Panel */}
           <div className="lg:col-span-2">
-            <div className="bg-surface rounded-xl p-6 border border-text/10 h-full">
-              <h3 className="text-xl font-bold text-text mb-4">
+            <div className="glass-effect rounded-2xl p-6 border-2 border-text/20 shadow-2xl h-full">
+              <h3 className="text-xl font-bold text-text mb-4 flex items-center gap-2">
+                <Settings2 size={20} className="text-primary" />
                 {selectedNode?.label || t.demo.selectNode}
               </h3>
-              <div className="bg-background rounded-lg p-4 overflow-auto max-h-[600px] border border-text/10">
+              <div className="bg-background rounded-lg p-4 overflow-auto max-h-[600px] border border-text/20">
                 <pre className="text-sm text-text/90 font-mono leading-relaxed">
                   <code className="block">
                     {selectedNode?.code.split('\n').map((line, i) => (
@@ -497,4 +645,3 @@ export default function InteractiveDemo() {
     </section>
   )
 }
-

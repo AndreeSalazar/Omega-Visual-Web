@@ -106,29 +106,11 @@ export default function Hero() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-            whileHover={{ scale: 1.05, y: -2 }}
-            className="inline-flex items-center gap-2 px-6 py-3 glass-effect rounded-full mb-10 border-primary/40 glow-primary shadow-lg"
-          >
-            <motion.span
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-              className="text-2xl"
-            >
-              🔥
-            </motion.span>
-            <span className="text-sm font-bold text-text">{t.hero.badge}</span>
-          </motion.div>
-
           {/* Main Title */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, type: 'spring', stiffness: 100, damping: 15 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 100, damping: 15 }}
             className="text-6xl md:text-8xl lg:text-9xl font-black mb-8 leading-[1.1]"
           >
             <motion.span
@@ -161,7 +143,7 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.4 }}
             className="text-xl md:text-3xl text-text/90 mb-16 max-w-4xl mx-auto whitespace-pre-line leading-relaxed font-medium"
           >
             {t.hero.subtitle}
@@ -171,7 +153,7 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
+            transition={{ delay: 0.5 }}
             className="flex flex-wrap items-center justify-center gap-6 mb-20"
           >
           {[
@@ -183,7 +165,7 @@ export default function Hero() {
               key={index}
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.7 + index * 0.15, type: 'spring', stiffness: 200 }}
+              transition={{ delay: 0.5 + index * 0.15, type: 'spring', stiffness: 200 }}
               whileHover={{ scale: 1.15, y: -4 }}
               className={`flex items-center gap-3 px-6 py-3 glass-effect rounded-xl ${badge.colorClass} ${badge.glow} transition-all cursor-default shadow-lg hover:shadow-xl`}
             >
@@ -203,7 +185,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 60, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 0.9, type: 'spring', stiffness: 100 }}
+          transition={{ delay: 0.7, type: 'spring', stiffness: 100 }}
           className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
         >
           <div className="relative w-full max-w-[1600px] mx-auto">
@@ -264,10 +246,10 @@ export default function Hero() {
                           className="text-4xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight drop-shadow-2xl"
                         >
                           <span className="bg-gradient-to-r from-white via-primary to-secondary bg-clip-text text-transparent">
-                            See Omega-Visual
+                            {t.hero.videoPreviewTitle}
                           </span>
                           <br />
-                          <span className="text-white">in Action</span>
+                          <span className="text-white">{t.hero.videoPreviewSubtitle}</span>
                         </motion.h3>
                         <motion.p
                           initial={{ opacity: 0, y: 20 }}
@@ -275,7 +257,7 @@ export default function Hero() {
                           transition={{ delay: 0.5 }}
                           className="text-white/90 text-xl md:text-2xl max-w-3xl mx-auto font-medium leading-relaxed"
                         >
-                          Watch how visual nodes transform code development
+                          {t.hero.videoPreviewDescription}
                         </motion.p>
                       </motion.div>
                       
@@ -344,7 +326,7 @@ export default function Hero() {
                           transition={{ delay: 0.8 }}
                           className="text-white/90 text-lg md:text-xl mt-8 text-center group-hover:text-primary font-bold transition-colors drop-shadow-lg"
                         >
-                          Click to play video
+                          {t.hero.clickToPlay}
                         </motion.p>
                       </motion.div>
                     </div>
@@ -426,7 +408,7 @@ export default function Hero() {
                         className="px-5 py-2.5 bg-surface/95 backdrop-blur-xl rounded-xl text-text text-sm font-semibold hover:bg-surface border-2 border-primary/50 hover:border-primary transition-all flex items-center gap-2 shadow-2xl"
                       >
                         <ArrowRight size={18} className="rotate-180" />
-                        <span>Back</span>
+                        <span>{t.hero.backToPreview}</span>
                       </motion.button>
                     </div>
                   </motion.div>
