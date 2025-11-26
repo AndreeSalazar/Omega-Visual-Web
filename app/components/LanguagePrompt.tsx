@@ -89,7 +89,7 @@ export default function LanguagePrompt() {
             ))}
           </motion.div>
           
-           {/* Banner - Perfectly centered */}
+           {/* Banner - Perfectly centered in the middle of the page */}
            <motion.div
              initial={{ opacity: 0, y: -40, scale: 0.9 }}
              animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -100,9 +100,13 @@ export default function LanguagePrompt() {
                stiffness: 400,
                mass: 0.8
              }}
-             className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-3xl px-4 sm:px-6"
+             className="fixed z-50 w-full max-w-3xl px-4 sm:px-6"
              style={{
+               top: '10vh',
+               left: '30vw',
                transform: 'translate(-50%, -50%)',
+               position: 'fixed',
+               margin: 0,
              }}
            >
             <div className="relative">
@@ -137,35 +141,36 @@ export default function LanguagePrompt() {
               </motion.div>
               <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 via-secondary/30 to-primary/30 rounded-3xl blur-xl opacity-40" />
               
-              {/* Main container with premium glass effect */}
-              <div className="relative rounded-3xl overflow-hidden backdrop-blur-2xl"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(26, 32, 64, 0.85) 0%, rgba(16, 20, 40, 0.9) 50%, rgba(26, 32, 64, 0.85) 100%)',
-                  boxShadow: `
-                    0 30px 60px -12px rgba(0, 0, 0, 0.6),
-                    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-                    0 0 100px rgba(255, 107, 53, 0.1),
-                    0 0 100px rgba(0, 217, 255, 0.1)
-                  `,
-                }}
-              >
-                {/* Premium animated border with gradient */}
-                <motion.div
-                  className="absolute -inset-[3px] rounded-3xl"
-                  style={{
-                    background: 'linear-gradient(90deg, rgba(255, 107, 53, 0.8), rgba(0, 217, 255, 0.8), rgba(255, 107, 53, 0.8))',
-                    backgroundSize: '300% 100%',
-                  }}
-                  animate={{
-                    backgroundPosition: ['0% 0%', '300% 0%'],
-                  }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
-                />
-                <div className="absolute inset-[3px] rounded-3xl bg-gradient-to-br from-surface/90 to-surface/95" />
+               {/* Main container with premium glass effect */}
+               <div className="relative rounded-3xl overflow-hidden backdrop-blur-2xl"
+                 style={{
+                   background: 'linear-gradient(135deg, rgba(26, 32, 64, 0.92) 0%, rgba(16, 20, 40, 0.95) 50%, rgba(26, 32, 64, 0.92) 100%)',
+                   boxShadow: `
+                     0 35px 70px -12px rgba(0, 0, 0, 0.7),
+                     0 0 0 1px rgba(255, 255, 255, 0.12) inset,
+                     0 0 120px rgba(255, 107, 53, 0.15),
+                     0 0 120px rgba(0, 217, 255, 0.15),
+                     0 0 200px rgba(255, 107, 53, 0.05)
+                   `,
+                 }}
+               >
+                 {/* Premium animated border with gradient */}
+                 <motion.div
+                   className="absolute -inset-[3px] rounded-3xl"
+                   style={{
+                     background: 'linear-gradient(90deg, rgba(255, 107, 53, 0.9), rgba(0, 217, 255, 0.9), rgba(255, 107, 53, 0.9))',
+                     backgroundSize: '300% 100%',
+                   }}
+                   animate={{
+                     backgroundPosition: ['0% 0%', '300% 0%'],
+                   }}
+                   transition={{
+                     duration: 6,
+                     repeat: Infinity,
+                     ease: 'linear',
+                   }}
+                 />
+                 <div className="absolute inset-[3px] rounded-3xl bg-gradient-to-br from-surface/95 via-surface/92 to-surface/95" />
                 {/* Enhanced animated background layers */}
                 <motion.div
                   className="absolute inset-0 opacity-25"
@@ -295,13 +300,15 @@ export default function LanguagePrompt() {
                          initial={{ opacity: 0, y: 20 }}
                          animate={{ opacity: 1, y: 0 }}
                          transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-                         className="text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-4 leading-tight"
+                         className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-5 leading-tight px-4"
                          style={{
-                           background: 'linear-gradient(135deg, #FFFFFF 0%, #E0E7FF 50%, #C7D2FE 100%)',
+                           background: 'linear-gradient(135deg, #FFFFFF 0%, #E0E7FF 40%, #C7D2FE 80%, #FFFFFF 100%)',
                            WebkitBackgroundClip: 'text',
                            WebkitTextFillColor: 'transparent',
                            backgroundClip: 'text',
-                           filter: 'drop-shadow(0 2px 20px rgba(224, 231, 255, 0.4))',
+                           filter: 'drop-shadow(0 4px 25px rgba(224, 231, 255, 0.6))',
+                           textShadow: '0 6px 30px rgba(224, 231, 255, 0.4)',
+                           letterSpacing: '-0.03em',
                          }}
                        >
                          {t.languagePrompt.title}
@@ -310,9 +317,10 @@ export default function LanguagePrompt() {
                          initial={{ opacity: 0, y: 20 }}
                          animate={{ opacity: 1, y: 0 }}
                          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-                         className="text-base sm:text-lg text-text/95 leading-relaxed font-medium mb-6"
+                         className="text-lg sm:text-xl lg:text-2xl text-text/98 leading-relaxed font-semibold mb-10 px-4"
                          style={{
-                           textShadow: '0 2px 15px rgba(0, 0, 0, 0.4)',
+                           textShadow: '0 3px 25px rgba(0, 0, 0, 0.6), 0 1px 10px rgba(224, 231, 255, 0.2)',
+                           letterSpacing: '0.01em',
                          }}
                        >
                          {t.languagePrompt.subtitle}
@@ -320,31 +328,34 @@ export default function LanguagePrompt() {
                      </div>
 
                      {/* Buttons - centered and properly spaced */}
-                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+                     <div className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full">
                        <motion.button
                          initial={{ opacity: 0, y: 20 }}
                          animate={{ opacity: 1, y: 0 }}
                          transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
                          whileHover={{ 
-                           scale: 1.05, 
-                           y: -2,
-                           boxShadow: "0 20px 40px rgba(0, 0, 0, 0.5)",
+                           scale: 1.06, 
+                           y: -3,
+                           boxShadow: "0 25px 50px rgba(0, 0, 0, 0.6)",
                          }}
-                         whileTap={{ scale: 0.97 }}
+                         whileTap={{ scale: 0.96 }}
                          onClick={handleKeepCurrent}
-                         className="px-8 py-4 rounded-2xl text-base sm:text-lg font-bold transition-all relative overflow-hidden group flex items-center justify-center gap-3 min-w-[200px]"
+                         className="px-10 py-5 rounded-2xl text-base sm:text-lg font-bold transition-all relative overflow-hidden group flex items-center justify-center gap-3 min-w-[220px]"
                          style={{
-                           background: 'linear-gradient(135deg, rgba(26, 32, 64, 0.95) 0%, rgba(16, 20, 40, 0.98) 100%)',
-                           border: '2px solid rgba(224, 231, 255, 0.25)',
-                           boxShadow: '0 10px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.2)',
+                           background: 'linear-gradient(135deg, rgba(26, 32, 64, 0.98) 0%, rgba(16, 20, 40, 1) 100%)',
+                           border: '2px solid rgba(224, 231, 255, 0.3)',
+                           boxShadow: '0 12px 30px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.3)',
                            color: '#E0E7FF',
                          }}
                        >
-                         {/* USA Flag SVG */}
+                         {/* USA Flag SVG - Enhanced with shadow */}
                          <svg 
-                           className="w-8 h-6 flex-shrink-0" 
+                           className="w-8 h-6 flex-shrink-0 relative z-20" 
                            viewBox="0 0 7410 3900" 
                            xmlns="http://www.w3.org/2000/svg"
+                           style={{
+                             filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))',
+                           }}
                          >
                            <rect width="7410" height="3900" fill="#b22234"/>
                            <path d="M0,450h7410m0,600H0m0,600h7410m0,600H0m0,600h7410m0,600H0" stroke="#fff" strokeWidth="300"/>
@@ -371,7 +382,7 @@ export default function LanguagePrompt() {
                              <use href="#s5" x="2964"/>
                            </g>
                          </svg>
-                         <span className="relative z-10">{t.languagePrompt.keepCurrent}</span>
+                         <span className="relative z-20">{t.languagePrompt.keepCurrent}</span>
                          <motion.div
                            className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/15 to-white/0"
                            initial={{ x: '-100%' }}
@@ -392,21 +403,21 @@ export default function LanguagePrompt() {
                          animate={{ opacity: 1, y: 0 }}
                          transition={{ delay: 0.7, type: "spring", stiffness: 200 }}
                          whileHover={{ 
-                           scale: 1.05,
-                           y: -2,
-                           boxShadow: "0 25px 50px rgba(255, 107, 53, 0.6)",
+                           scale: 1.06,
+                           y: -3,
+                           boxShadow: "0 30px 60px rgba(255, 107, 53, 0.7)",
                          }}
-                         whileTap={{ scale: 0.97 }}
+                         whileTap={{ scale: 0.96 }}
                          onClick={handleSwitch}
-                         className="px-8 py-4 rounded-2xl text-base sm:text-lg font-extrabold text-white transition-all relative overflow-hidden group flex items-center justify-center gap-3 min-w-[200px]"
+                         className="px-10 py-5 rounded-2xl text-base sm:text-lg font-extrabold text-white transition-all relative overflow-visible group flex items-center justify-center gap-3 min-w-[220px]"
                          style={{
                            background: 'linear-gradient(135deg, #FF6B35 0%, #FF8C42 25%, #00D9FF 75%, #00B8D4 100%)',
                            backgroundSize: '200% 100%',
-                           boxShadow: '0 15px 35px rgba(255, 107, 53, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.2)',
+                           boxShadow: '0 18px 40px rgba(255, 107, 53, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.4), inset 0 -2px 0 rgba(0, 0, 0, 0.3)',
                          }}
                        >
                          <motion.div
-                           className="absolute inset-0"
+                           className="absolute inset-0 rounded-2xl"
                            animate={{
                              backgroundPosition: ['0% 0%', '100% 0%'],
                            }}
@@ -416,24 +427,27 @@ export default function LanguagePrompt() {
                              ease: "linear",
                            }}
                          />
-                         {/* Peru Flag SVG */}
+                         {/* Peru Flag SVG - Always visible with high z-index */}
                          <svg 
-                           className="w-8 h-6 flex-shrink-0" 
+                           className="w-8 h-6 flex-shrink-0 relative z-20" 
                            viewBox="0 0 900 600" 
                            xmlns="http://www.w3.org/2000/svg"
+                           style={{
+                             filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))',
+                           }}
                          >
                            <rect width="900" height="600" fill="#D91023"/>
                            <rect x="0" y="0" width="300" height="600" fill="#D91023"/>
                            <rect x="300" y="0" width="300" height="600" fill="#ffffff"/>
                            <rect x="600" y="0" width="300" height="600" fill="#D91023"/>
                          </svg>
-                         <span className="relative z-10 drop-shadow-lg">{t.languagePrompt.switchTo}</span>
+                         <span className="relative z-20 drop-shadow-lg">{t.languagePrompt.switchTo}</span>
                          <motion.div
-                           className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100"
+                           className="absolute inset-0 rounded-2xl bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-30"
                            transition={{ duration: 0.4 }}
                          />
                          <motion.div
-                           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                           className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent"
                            initial={{ x: '-100%' }}
                            whileHover={{ x: '100%' }}
                            transition={{ duration: 1, ease: "easeInOut" }}
