@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Play, Terminal, Settings2 } from 'lucide-react'
 import { useI18n } from '@/lib/i18n-context'
@@ -13,6 +13,7 @@ interface Node {
   code: string
   connections: string[]
   isDragging?: boolean
+  status?: 'idle' | 'processing' | 'executing' | 'completed'
 }
 
 const initialNodes: Node[] = [
@@ -21,6 +22,7 @@ const initialNodes: Node[] = [
     x: 200,
     y: 150,
     label: 'hello_world.asm',
+    status: 'idle',
     code: `; Hello World Bootloader
 global _start
 _start:
@@ -48,6 +50,7 @@ msg db 'Hello, World!', 0`,
     x: 450,
     y: 150,
     label: 'kernel.asm',
+    status: 'idle',
     code: `; Kernel initialization
 section .text
 global kernel_main
@@ -79,6 +82,7 @@ stack_top:`,
     x: 700,
     y: 150,
     label: 'Output',
+    status: 'idle',
     code: `; Compiled output
 ; Binary: hello_world.bin
 ; Size: 512 bytes
@@ -103,7 +107,71 @@ export default function InteractiveDemo() {
   const [terminalOutput, setTerminalOutput] = useState('')
   const [draggedNode, setDraggedNode] = useState<string | null>(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const [animationTime, setAnimationTime] = useState(0)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const mouseDownPosRef = useRef({ x: 0, y: 0 })
+  const isDraggingRef = useRef(false)
+
+  // Update animation time for continuous animations
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimationTime(Date.now() * 0.001)
+    }, 16) // ~60fps
+    return () => clearInterval(interval)
+  }, [])
+
+  const handleNodePlay = useCallback((nodeId: string) => {
+    const node = nodes.find((n) => n.id === nodeId)
+    if (node && node.id === 'hello_world') {
+      setIsRunning(true)
+      
+      // Reset all nodes
+      setNodes((prev) => prev.map((n) => ({ ...n, status: 'idle' as const })))
+      
+      // Step 1: First node executing
+      setTimeout(() => {
+        setNodes((prev) => prev.map((n) => 
+          n.id === 'hello_world' ? { ...n, status: 'executing' as const } : n
+        ))
+        setTerminalOutput('> Compiling hello_world.asm...\n')
+      }, 300)
+      
+      // Step 2: First node completes, second node processing
+      setTimeout(() => {
+        setNodes((prev) => prev.map((n) => 
+          n.id === 'hello_world' ? { ...n, status: 'completed' as const } :
+          n.id === 'kernel' ? { ...n, status: 'processing' as const } : n
+        ))
+        setTerminalOutput((prev) => prev + '> Linking...\n> Processing kernel.asm...\n')
+      }, 1200)
+      
+      // Step 3: Second node executing
+      setTimeout(() => {
+        setNodes((prev) => prev.map((n) => 
+          n.id === 'kernel' ? { ...n, status: 'executing' as const } : n
+        ))
+        setTerminalOutput((prev) => prev + '> Executing kernel...\n')
+      }, 2000)
+      
+      // Step 4: Second node completes, third node executing
+      setTimeout(() => {
+        setNodes((prev) => prev.map((n) => 
+          n.id === 'kernel' ? { ...n, status: 'completed' as const } :
+          n.id === 'output' ? { ...n, status: 'executing' as const } : n
+        ))
+        setTerminalOutput((prev) => prev + '> Success!\n> Hello, World!\n> Kernel loaded!\n')
+      }, 2800)
+      
+      // Step 5: All complete
+      setTimeout(() => {
+        setNodes((prev) => prev.map((n) => ({ ...n, status: 'completed' as const })))
+        setTimeout(() => {
+          setIsRunning(false)
+          setNodes((prev) => prev.map((n) => ({ ...n, status: 'idle' as const })))
+        }, 2000)
+      }, 3500)
+    }
+  }, [nodes])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -191,9 +259,9 @@ export default function InteractiveDemo() {
         })
       }
 
-      // Draw nodes
+      // Draw nodes with continuous animation
       nodes.forEach((node) => {
-        drawNode(ctx, node, node === selectedNode)
+        drawNode(ctx, node, node === selectedNode, animationTime)
       })
 
       animationFrameId = requestAnimationFrame(draw)
@@ -201,12 +269,17 @@ export default function InteractiveDemo() {
 
     draw()
 
+    const dragThreshold = 5 // pixels
+
     const handleMouseDown = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect()
       const scaleX = canvas.width / rect.width
       const scaleY = canvas.height / rect.height
       const x = (e.clientX - rect.left) * scaleX
       const y = (e.clientY - rect.top) * scaleY
+
+      mouseDownPosRef.current = { x, y }
+      isDraggingRef.current = false
 
       const clickedNode = nodes.find((node) => {
         const nodeX = node.x - 80
@@ -224,18 +297,26 @@ export default function InteractiveDemo() {
         )
 
         if (distToPlay < playButtonSize) {
-          // Clicked play button
+          // Clicked play button - don't drag
           handleNodePlay(clickedNode.id)
+          setSelectedNode(clickedNode)
           return
         }
 
-        // Start dragging
-        setDraggedNode(clickedNode.id)
+        // Select the node immediately (for viewing code)
+        setSelectedNode(clickedNode)
+        
+        // Store drag offset and prepare for potential drag
         setDragOffset({
           x: x - clickedNode.x,
           y: y - clickedNode.y,
         })
-        setSelectedNode(clickedNode)
+        // Set draggedNode so we can track it in mousemove
+        setDraggedNode(clickedNode.id)
+      } else {
+        // Clicked outside - deselect
+        setSelectedNode(null)
+        setDraggedNode(null)
       }
     }
 
@@ -246,7 +327,20 @@ export default function InteractiveDemo() {
       const x = (e.clientX - rect.left) * scaleX
       const y = (e.clientY - rect.top) * scaleY
 
-      if (draggedNode) {
+      // Check if we should start dragging (mouse moved enough from initial click)
+      if (draggedNode && !isDraggingRef.current) {
+        const dx = x - mouseDownPosRef.current.x
+        const dy = y - mouseDownPosRef.current.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+        
+        if (distance > dragThreshold) {
+          // Start dragging
+          isDraggingRef.current = true
+        }
+      }
+
+      if (draggedNode && isDraggingRef.current) {
+        // Actually dragging - move the node
         setNodes((prevNodes) =>
           prevNodes.map((node) =>
             node.id === draggedNode
@@ -254,7 +348,12 @@ export default function InteractiveDemo() {
               : node
           )
         )
+        canvas.style.cursor = 'grabbing'
+      } else if (draggedNode && !isDraggingRef.current) {
+        // Node selected but not dragging yet
+        canvas.style.cursor = 'grab'
       } else {
+        // Not dragging - check for hover
         const hoveredNode = nodes.find((node) => {
           const nodeX = node.x - 80
           const nodeY = node.y - 20
@@ -277,7 +376,10 @@ export default function InteractiveDemo() {
     }
 
     const handleMouseUp = () => {
+      // Reset drag state
       setDraggedNode(null)
+      isDraggingRef.current = false
+      mouseDownPosRef.current = { x: 0, y: 0 }
     }
 
     canvas.addEventListener('mousedown', handleMouseDown)
@@ -292,19 +394,7 @@ export default function InteractiveDemo() {
       canvas.removeEventListener('mouseleave', handleMouseUp)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [nodes, selectedNode, isRunning, draggedNode, dragOffset])
-
-  const handleNodePlay = (nodeId: string) => {
-    const node = nodes.find((n) => n.id === nodeId)
-    if (node && node.id === 'hello_world') {
-      setIsRunning(true)
-      setTerminalOutput('> Compiling hello_world.asm...\n> Linking...\n')
-      setTimeout(() => {
-        setTerminalOutput((prev) => prev + '> Success!\n> Hello, World!\n')
-        setTimeout(() => setIsRunning(false), 2000)
-      }, 1500)
-    }
-  }
+  }, [nodes, selectedNode, isRunning, draggedNode, dragOffset, animationTime, handleNodePlay])
 
   const drawConnection = (ctx: CanvasRenderingContext2D, from: Node, to: Node, index: number) => {
     const isActive = isRunning || (selectedNode && (selectedNode === from || selectedNode === to))
@@ -338,24 +428,69 @@ export default function InteractiveDemo() {
     ctx.shadowBlur = 0
   }
 
-  const drawNode = (ctx: CanvasRenderingContext2D, node: Node, isSelected: boolean) => {
+  const drawNode = (ctx: CanvasRenderingContext2D, node: Node, isSelected: boolean, time: number) => {
     const x = node.x - 80
     const y = node.y - 20
     const width = 160
     const height = 80
     const radius = 8
 
-    // Outer glow for selected nodes
-    if (isSelected) {
-      ctx.shadowBlur = 25
-      ctx.shadowColor = 'rgba(255, 107, 53, 0.6)'
+    // Status-based glow and colors
+    let statusGlow = { blur: 0, color: 'transparent', intensity: 0 }
+    let statusBorderColor = 'rgba(255, 107, 53, 0.5)'
+    
+    if (node.status === 'executing') {
+      statusGlow = {
+        blur: 30 + Math.sin(time * 5) * 10,
+        color: 'rgba(0, 217, 255, 0.8)',
+        intensity: 0.8 + Math.sin(time * 5) * 0.2
+      }
+      statusBorderColor = 'rgba(0, 217, 255, 0.9)'
+    } else if (node.status === 'processing') {
+      statusGlow = {
+        blur: 25 + Math.sin(time * 3) * 8,
+        color: 'rgba(255, 200, 0, 0.7)',
+        intensity: 0.7 + Math.sin(time * 3) * 0.2
+      }
+      statusBorderColor = 'rgba(255, 200, 0, 0.8)'
+    } else if (node.status === 'completed') {
+      statusGlow = {
+        blur: 20,
+        color: 'rgba(0, 255, 150, 0.6)',
+        intensity: 0.6
+      }
+      statusBorderColor = 'rgba(0, 255, 150, 0.7)'
+    } else if (isSelected) {
+      statusGlow = {
+        blur: 25,
+        color: 'rgba(255, 107, 53, 0.6)',
+        intensity: 0.6
+      }
+      statusBorderColor = 'rgba(255, 107, 53, 0.8)'
     }
 
-    // Header (orange-brown gradient)
+    // Outer glow
+    if (statusGlow.blur > 0) {
+      ctx.shadowBlur = statusGlow.blur
+      ctx.shadowColor = statusGlow.color
+    }
+
+    // Header (orange-brown gradient with status animation)
     const headerHeight = 30
-    const headerGradient = ctx.createLinearGradient(x, y, x, y + headerHeight)
-    headerGradient.addColorStop(0, 'rgba(139, 69, 19, 0.9)')
-    headerGradient.addColorStop(1, 'rgba(101, 50, 14, 0.9)')
+    let headerGradient = ctx.createLinearGradient(x, y, x, y + headerHeight)
+    
+    if (node.status === 'executing') {
+      const pulse = Math.sin(time * 5) * 0.2 + 0.8
+      headerGradient.addColorStop(0, `rgba(${139 * pulse}, ${69 * pulse}, ${19 * pulse}, 0.95)`)
+      headerGradient.addColorStop(1, `rgba(${101 * pulse}, ${50 * pulse}, ${14 * pulse}, 0.95)`)
+    } else if (node.status === 'processing') {
+      const pulse = Math.sin(time * 3) * 0.15 + 0.85
+      headerGradient.addColorStop(0, `rgba(${255 * pulse}, ${200 * pulse}, ${0}, 0.9)`)
+      headerGradient.addColorStop(1, `rgba(${255 * pulse * 0.8}, ${140 * pulse}, ${0}, 0.9)`)
+    } else {
+      headerGradient.addColorStop(0, 'rgba(139, 69, 19, 0.9)')
+      headerGradient.addColorStop(1, 'rgba(101, 50, 14, 0.9)')
+    }
 
     ctx.fillStyle = headerGradient
     ctx.beginPath()
@@ -369,10 +504,21 @@ export default function InteractiveDemo() {
     ctx.closePath()
     ctx.fill()
 
-    // Body (dark grey)
-    const bodyGradient = ctx.createLinearGradient(x, y + headerHeight, x, y + height)
-    bodyGradient.addColorStop(0, 'rgba(26, 31, 58, 0.95)')
-    bodyGradient.addColorStop(1, 'rgba(10, 14, 39, 0.95)')
+    // Body (dark grey with status animation)
+    let bodyGradient = ctx.createLinearGradient(x, y + headerHeight, x, y + height)
+    
+    if (node.status === 'executing') {
+      const pulse = Math.sin(time * 5) * 0.1
+      bodyGradient.addColorStop(0, `rgba(${26 + pulse * 10}, ${31 + pulse * 10}, ${58 + pulse * 20}, 0.98)`)
+      bodyGradient.addColorStop(1, `rgba(${10 + pulse * 5}, ${14 + pulse * 5}, ${39 + pulse * 10}, 0.98)`)
+    } else if (node.status === 'processing') {
+      const pulse = Math.sin(time * 3) * 0.08
+      bodyGradient.addColorStop(0, `rgba(${30 + pulse * 15}, ${35 + pulse * 15}, ${65 + pulse * 25}, 0.95)`)
+      bodyGradient.addColorStop(1, `rgba(${15 + pulse * 8}, ${20 + pulse * 8}, ${45 + pulse * 15}, 0.95)`)
+    } else {
+      bodyGradient.addColorStop(0, 'rgba(26, 31, 58, 0.95)')
+      bodyGradient.addColorStop(1, 'rgba(10, 14, 39, 0.95)')
+    }
 
     ctx.fillStyle = bodyGradient
     ctx.beginPath()
@@ -385,19 +531,9 @@ export default function InteractiveDemo() {
     ctx.closePath()
     ctx.fill()
 
-    // Border
-    const borderGradient = ctx.createLinearGradient(x, y, x + width, y + height)
-    if (isSelected) {
-      borderGradient.addColorStop(0, '#FF6B35')
-      borderGradient.addColorStop(0.5, '#00D9FF')
-      borderGradient.addColorStop(1, '#FF6B35')
-    } else {
-      borderGradient.addColorStop(0, 'rgba(255, 107, 53, 0.5)')
-      borderGradient.addColorStop(1, 'rgba(255, 107, 53, 0.3)')
-    }
-    
-    ctx.strokeStyle = borderGradient
-    ctx.lineWidth = isSelected ? 3 : 2
+    // Border with status colors
+    ctx.strokeStyle = statusBorderColor
+    ctx.lineWidth = (node.status !== 'idle' || isSelected) ? 3 : 2
     ctx.beginPath()
     ctx.moveTo(x + radius, y)
     ctx.lineTo(x + width - radius, y)
@@ -434,18 +570,50 @@ export default function InteractiveDemo() {
     ctx.textAlign = 'left'
     ctx.fillText(node.label, x + 25, y + headerHeight / 2)
 
-    // Play button in header (right side)
+    // Play button in header (right side) with status animation
     const playButtonX = node.x + 50
     const playButtonY = node.y - 10
     const playButtonSize = 18
     
-    // Play button background (orange-yellow)
+    // Animated play button based on status
+    let playButtonColor = { start: 'rgba(255, 200, 0, 1)', end: 'rgba(255, 140, 0, 1)' }
+    let playButtonGlow = 0
+    
+    if (node.status === 'executing') {
+      const pulse = Math.sin(time * 8) * 0.3 + 0.7
+      playButtonColor = {
+        start: `rgba(${0 * pulse}, ${217 * pulse}, ${255 * pulse}, 1)`,
+        end: `rgba(${0 * pulse * 0.7}, ${140 * pulse}, ${255 * pulse}, 1)`
+      }
+      playButtonGlow = 15 + Math.sin(time * 8) * 5
+    } else if (node.status === 'processing') {
+      const pulse = Math.sin(time * 4) * 0.2 + 0.8
+      playButtonColor = {
+        start: `rgba(${255 * pulse}, ${200 * pulse}, ${0}, 1)`,
+        end: `rgba(${255 * pulse * 0.8}, ${140 * pulse}, ${0}, 1)`
+      }
+      playButtonGlow = 10 + Math.sin(time * 4) * 3
+    } else if (node.status === 'completed') {
+      playButtonColor = {
+        start: 'rgba(0, 255, 150, 1)',
+        end: 'rgba(0, 200, 120, 1)'
+      }
+      playButtonGlow = 8
+    }
+    
+    // Play button glow
+    if (playButtonGlow > 0) {
+      ctx.shadowBlur = playButtonGlow
+      ctx.shadowColor = playButtonColor.start
+    }
+    
+    // Play button background
     const playGradient = ctx.createRadialGradient(
       playButtonX, playButtonY, 0,
       playButtonX, playButtonY, playButtonSize
     )
-    playGradient.addColorStop(0, 'rgba(255, 200, 0, 1)')
-    playGradient.addColorStop(1, 'rgba(255, 140, 0, 1)')
+    playGradient.addColorStop(0, playButtonColor.start)
+    playGradient.addColorStop(1, playButtonColor.end)
     
     ctx.fillStyle = playGradient
     ctx.beginPath()
@@ -453,23 +621,51 @@ export default function InteractiveDemo() {
     ctx.fill()
     
     // Play button border
-    ctx.strokeStyle = 'rgba(255, 200, 0, 0.8)'
+    ctx.strokeStyle = playButtonColor.start
     ctx.lineWidth = 2
     ctx.stroke()
+    ctx.shadowBlur = 0
     
-    // Play triangle
+    // Play triangle or checkmark based on status
     ctx.fillStyle = '#000000'
-    ctx.beginPath()
-    ctx.moveTo(playButtonX - 4, playButtonY - 5)
-    ctx.lineTo(playButtonX - 4, playButtonY + 5)
-    ctx.lineTo(playButtonX + 6, playButtonY)
-    ctx.closePath()
-    ctx.fill()
+    if (node.status === 'completed') {
+      // Draw checkmark
+      ctx.beginPath()
+      ctx.moveTo(playButtonX - 6, playButtonY)
+      ctx.lineTo(playButtonX - 2, playButtonY + 4)
+      ctx.lineTo(playButtonX + 6, playButtonY - 4)
+      ctx.lineWidth = 2.5
+      ctx.strokeStyle = '#000000'
+      ctx.stroke()
+    } else {
+      // Draw play triangle
+      ctx.beginPath()
+      ctx.moveTo(playButtonX - 4, playButtonY - 5)
+      ctx.lineTo(playButtonX - 4, playButtonY + 5)
+      ctx.lineTo(playButtonX + 6, playButtonY)
+      ctx.closePath()
+      ctx.fill()
+    }
 
-    // Connection points
-    const connectionColor = isSelected ? 'rgba(255, 107, 53, 0.9)' : 'rgba(0, 217, 255, 0.6)'
+    // Connection points with status animation
+    let connectionColor = 'rgba(0, 217, 255, 0.6)'
+    if (node.status === 'executing') {
+      const pulse = Math.sin(time * 5) * 0.3 + 0.7
+      connectionColor = `rgba(0, 217, 255, ${0.6 + pulse * 0.4})`
+    } else if (node.status === 'processing') {
+      const pulse = Math.sin(time * 3) * 0.2 + 0.8
+      connectionColor = `rgba(255, 200, 0, ${0.6 + pulse * 0.4})`
+    } else if (node.status === 'completed') {
+      connectionColor = 'rgba(0, 255, 150, 0.8)'
+    } else if (isSelected) {
+      connectionColor = 'rgba(255, 107, 53, 0.9)'
+    }
     
-    // Left connection point (IN)
+    // Left connection point (IN) with glow
+    if (node.status === 'processing' || node.status === 'executing') {
+      ctx.shadowBlur = 8
+      ctx.shadowColor = connectionColor
+    }
     ctx.fillStyle = 'rgba(255, 255, 255, 0.9)'
     ctx.beginPath()
     ctx.arc(x, node.y + 20, 6, 0, Math.PI * 2)
@@ -477,12 +673,17 @@ export default function InteractiveDemo() {
     ctx.strokeStyle = connectionColor
     ctx.lineWidth = 2
     ctx.stroke()
+    ctx.shadowBlur = 0
     ctx.fillStyle = '#000000'
     ctx.font = 'bold 8px Inter'
     ctx.textAlign = 'center'
     ctx.fillText('IN', x, node.y + 20)
     
-    // Right connection point (OUT)
+    // Right connection point (OUT) with glow
+    if (node.status === 'executing' || node.status === 'completed') {
+      ctx.shadowBlur = 10
+      ctx.shadowColor = connectionColor
+    }
     ctx.fillStyle = connectionColor
     ctx.beginPath()
     ctx.arc(x + width, node.y + 20, 6, 0, Math.PI * 2)
@@ -490,19 +691,77 @@ export default function InteractiveDemo() {
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
     ctx.lineWidth = 1
     ctx.stroke()
+    ctx.shadowBlur = 0
     ctx.fillStyle = '#FFFFFF'
     ctx.font = 'bold 8px Inter'
     ctx.fillText('OUT', x + width, node.y + 20)
+    
+    // Status indicator text
+    if (node.status !== 'idle') {
+      const statusText = 
+        node.status === 'executing' ? 'Executing...' :
+        node.status === 'processing' ? 'Processing...' :
+        node.status === 'completed' ? 'Done' : ''
+      
+      ctx.fillStyle = node.status === 'completed' ? 'rgba(0, 255, 150, 0.9)' :
+                      node.status === 'executing' ? 'rgba(0, 217, 255, 0.9)' :
+                      'rgba(255, 200, 0, 0.9)'
+      ctx.font = 'bold 9px Inter'
+      ctx.textAlign = 'center'
+      ctx.fillText(statusText, node.x, node.y + 55)
+    }
   }
 
   const handleRun = () => {
     setIsRunning(true)
-    setTerminalOutput('> Compiling hello_world.asm...\n> Compiling kernel.asm...\n> Linking...\n')
-
+    setTerminalOutput('')
+    
+    // Reset all nodes
+    setNodes((prev) => prev.map((n) => ({ ...n, status: 'idle' as const })))
+    
+    // Step 1: First node executing
     setTimeout(() => {
-      setTerminalOutput((prev) => prev + '> Success!\n> Hello, World!\n> Kernel loaded!\n')
-      setTimeout(() => setIsRunning(false), 2000)
+      setNodes((prev) => prev.map((n) => 
+        n.id === 'hello_world' ? { ...n, status: 'executing' as const } : n
+      ))
+      setTerminalOutput('> Compiling hello_world.asm...\n')
+    }, 300)
+    
+    // Step 2: First node completes, second node processing
+    setTimeout(() => {
+      setNodes((prev) => prev.map((n) => 
+        n.id === 'hello_world' ? { ...n, status: 'completed' as const } :
+        n.id === 'kernel' ? { ...n, status: 'processing' as const } : n
+      ))
+      setTerminalOutput((prev) => prev + '> Linking...\n> Processing kernel.asm...\n')
     }, 1500)
+    
+    // Step 3: Second node executing
+    setTimeout(() => {
+      setNodes((prev) => prev.map((n) => 
+        n.id === 'kernel' ? { ...n, status: 'executing' as const } : n
+      ))
+      setTerminalOutput((prev) => prev + '> Executing kernel...\n')
+    }, 2500)
+    
+    // Step 4: Second node completes, third node executing
+    setTimeout(() => {
+      setNodes((prev) => prev.map((n) => 
+        n.id === 'kernel' ? { ...n, status: 'completed' as const } :
+        n.id === 'output' ? { ...n, status: 'executing' as const } : n
+      ))
+      setTerminalOutput((prev) => prev + '> Success!\n> Hello, World!\n> Kernel loaded!\n')
+    }, 3500)
+    
+    // Step 5: All complete
+    setTimeout(() => {
+      setNodes((prev) => prev.map((n) => ({ ...n, status: 'completed' as const })))
+      setTimeout(() => {
+        setIsRunning(false)
+        setNodes((prev) => prev.map((n) => ({ ...n, status: 'idle' as const })))
+        setTerminalOutput('')
+      }, 2000)
+    }, 4500)
   }
 
   return (
