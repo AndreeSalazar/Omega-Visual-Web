@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Check } from 'lucide-react'
+import { Check, Sparkles } from 'lucide-react'
 import { useI18n } from '@/lib/i18n-context'
 
 const features = [
@@ -26,8 +26,9 @@ const features = [
     description: 'Integrated terminal. See output in real-time. Debug visually.',
   },
   {
-    title: 'Parameter Extraction (Coming Soon)',
+    title: 'Parameter Extraction',
     description: 'ch("param") automatically extracts from upstream. Change once, affects all.',
+    comingSoon: true,
   },
   {
     title: 'Multi-Mode Execution',
@@ -48,7 +49,7 @@ const features = [
 ]
 
 export default function Features() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   
   return (
     <section id="features" className="py-24 bg-background">
@@ -85,9 +86,29 @@ export default function Features() {
                   </motion.div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold mb-2 text-text group-hover:text-primary transition-colors">
-                    {feature.title}
-                  </h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h3 className="text-lg font-bold text-text group-hover:text-primary transition-colors">
+                      {feature.title}
+                    </h3>
+                    {(feature as any).comingSoon && (
+                      <motion.span
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        whileHover={{ scale: 1.05 }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 border border-primary/40 rounded-full text-xs font-bold text-primary relative overflow-hidden group"
+                      >
+                        <motion.div
+                          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                          animate={{ x: ['-100%', '100%'] }}
+                          transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                        />
+                        <Sparkles size={12} className="text-secondary relative z-10" />
+                        <span className="relative z-10">
+                          {locale === 'es' ? 'Próximamente' : 'Coming Soon'}
+                        </span>
+                      </motion.span>
+                    )}
+                  </div>
                   <p className="text-text/70 leading-relaxed group-hover:text-text/90 transition-colors">
                     {feature.description}
                   </p>

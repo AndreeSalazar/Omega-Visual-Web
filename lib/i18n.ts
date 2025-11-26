@@ -9,8 +9,6 @@ export const translations = {
     nav: {
       features: 'Features',
       useCases: 'Use Cases',
-      pricing: 'Pricing',
-      faq: 'FAQ',
       joinBeta: 'Join Beta',
     },
     // Hero
@@ -99,14 +97,6 @@ export const translations = {
     roadmap: {
       title: 'The Future of Omega-Visual',
     },
-    // Pricing
-    pricing: {
-      title: 'Start Building Today',
-    },
-    // FAQ
-    faq: {
-      title: 'Frequently Asked Questions',
-    },
     // Final CTA
     finalCTA: {
       title: 'Join the Revolution in System Development',
@@ -137,8 +127,6 @@ export const translations = {
     nav: {
       features: 'Características',
       useCases: 'Casos de Uso',
-      pricing: 'Precios',
-      faq: 'Preguntas',
       joinBeta: 'Únete a Beta',
     },
     // Hero
@@ -226,14 +214,6 @@ export const translations = {
     // Roadmap
     roadmap: {
       title: 'El Futuro de Omega-Visual',
-    },
-    // Pricing
-    pricing: {
-      title: 'Comienza a Construir Hoy',
-    },
-    // FAQ
-    faq: {
-      title: 'Preguntas Frecuentes',
     },
     // Final CTA
     finalCTA: {

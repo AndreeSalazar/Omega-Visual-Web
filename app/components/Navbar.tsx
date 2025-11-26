@@ -44,8 +44,6 @@ export default function Navbar() {
             {[
               { href: '#features', label: t.nav.features },
               { href: '#use-cases', label: t.nav.useCases },
-              { href: '#pricing', label: t.nav.pricing },
-              { href: '#faq', label: t.nav.faq },
             ].map((link) => (
               <motion.a
                 key={link.href}
@@ -95,12 +93,6 @@ export default function Navbar() {
               </a>
               <a href="#use-cases" className="block text-text hover:text-primary">
                 {t.nav.useCases}
-              </a>
-              <a href="#pricing" className="block text-text hover:text-primary">
-                {t.nav.pricing}
-              </a>
-              <a href="#faq" className="block text-text hover:text-primary">
-                {t.nav.faq}
               </a>
               <div className="flex items-center gap-2">
                 <LanguageSwitcher />

@@ -8,8 +8,6 @@ import Comparison from './components/Comparison'
 import Testimonials from './components/Testimonials'
 import Architecture from './components/Architecture'
 import Roadmap from './components/Roadmap'
-import Pricing from './components/Pricing'
-import FAQ from './components/FAQ'
 import FinalCTA from './components/FinalCTA'
 import Footer from './components/Footer'
 
@@ -26,8 +24,6 @@ export default function Home() {
       <Testimonials />
       <Architecture />
       <Roadmap />
-      <Pricing />
-      <FAQ />
       <FinalCTA />
       <Footer />
     </main>
