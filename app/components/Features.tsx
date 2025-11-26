@@ -36,9 +36,7 @@ export default function Features() {
             transition={{ delay: 0.2 }}
             className="text-text/60 text-lg max-w-2xl mx-auto"
           >
-            {locale === 'es' 
-              ? 'Características diseñadas para desarrolladores profesionales'
-              : 'Features designed for professional developers'}
+            {t.features.subtitle}
           </motion.p>
         </motion.div>
 
@@ -140,7 +138,7 @@ export default function Features() {
                         </motion.span>
                         {/* Text */}
                         <span className="relative z-10 font-bold tracking-wide">
-                          {locale === 'es' ? 'Próximamente' : 'Coming Soon'}
+                          {t.features.comingSoon}
                         </span>
                       </motion.span>
                     )}

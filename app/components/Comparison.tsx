@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Check, X, AlertCircle, Rocket } from 'lucide-react'
 import { useI18n } from '@/lib/i18n-context'
 
-const renderCell = (value: boolean | string | 'coming', locale: string) => {
+const renderCell = (value: boolean | string | 'coming', soonText: string) => {
   if (value === true) {
     return (
       <motion.div
@@ -39,7 +39,7 @@ const renderCell = (value: boolean | string | 'coming', locale: string) => {
       >
         <Rocket className="text-secondary" size={16} />
         <span className="text-secondary text-xs font-bold">
-          {locale === 'es' ? 'Próximamente' : 'Soon'}
+          {soonText}
         </span>
       </motion.div>
     )
@@ -54,16 +54,60 @@ export default function Comparison() {
   const toolKeys = ['visualStudio', 'vsCode', 'houdini', 'blender', 'unreal', 'nodeRed', 'maxMsp', 'touchDesigner', 'omegaVisual'] as const
   
   return (
-    <section className="py-24 bg-gradient-to-b from-background via-surface to-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.h2
+    <section className="py-24 bg-gradient-to-b from-background via-surface to-background relative overflow-hidden">
+      {/* Background glow effect */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[300px] blur-3xl opacity-10"
+          style={{
+            background: 'radial-gradient(circle, rgba(0, 217, 255, 0.4), transparent 70%)',
+          }}
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.1, 0.15, 0.1],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-black text-center mb-16 text-gradient"
+          transition={{ type: 'spring', stiffness: 100, damping: 15 }}
+          className="text-center mb-16 relative"
         >
-          {t.comparison.title}
-        </motion.h2>
+          <motion.h2
+            className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 relative inline-block"
+            style={{
+              background: 'linear-gradient(135deg, #00D9FF 0%, #00D9FF 40%, #4ADE80 60%, #4ADE80 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              filter: 'drop-shadow(0 4px 25px rgba(0, 217, 255, 0.5)) drop-shadow(0 0 40px rgba(74, 222, 128, 0.3))',
+              letterSpacing: '-0.03em',
+              lineHeight: '1.1',
+            }}
+          >
+            {t.comparison.title}
+          </motion.h2>
+          {/* Decorative underline */}
+          <motion.div
+            className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 rounded-full"
+            style={{
+              background: 'linear-gradient(90deg, transparent, #00D9FF, #4ADE80, transparent)',
+            }}
+            initial={{ width: 0, opacity: 0 }}
+            whileInView={{ width: 128, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+          />
+        </motion.div>
 
         <div className="overflow-x-auto -mx-4 sm:mx-0">
           <div className="bg-surface/50 backdrop-blur-sm rounded-xl border border-text/10 p-4 sm:p-6 shadow-2xl">
@@ -72,7 +116,7 @@ export default function Comparison() {
                 <thead>
                   <tr className="border-b-2 border-text/20">
                     <th className="text-left py-4 px-3 sm:px-4 text-text font-bold text-sm sm:text-base sticky left-0 bg-surface/50 backdrop-blur-sm z-10">
-                      {locale === 'es' ? 'Característica' : 'Feature'}
+                      {t.comparison.featureLabel}
                     </th>
                     {toolKeys.map((toolKey) => (
                       <th
@@ -114,7 +158,7 @@ export default function Comparison() {
                                 : ''
                             }`}
                           >
-                            {renderCell(value, locale)}
+                            {renderCell(value, t.comparison.soon)}
                           </td>
                         )
                       })}

@@ -132,7 +132,7 @@ export default function Roadmap() {
             >
               <div className="absolute top-2 right-2">
                 <span className="px-2 py-1 bg-primary/20 text-primary text-xs font-bold rounded-full">
-                  {locale === 'es' ? 'Futuro' : 'Future'}
+                  {t.roadmap.future}
                 </span>
               </div>
               <div className="w-12 h-12 bg-gradient-to-br from-text/20 to-text/40 rounded-lg flex items-center justify-center mb-4">
@@ -207,12 +207,12 @@ export default function Roadmap() {
                           <Icon size={18} />
                           {milestone.status === 'completed' && (
                             <span className="text-xs font-semibold">
-                              {locale === 'es' ? 'Completado' : 'Completed'}
+                              {t.roadmap.completed}
                             </span>
                           )}
                           {milestone.status === 'in-progress' && (
                             <span className="text-xs font-semibold">
-                              {locale === 'es' ? 'En Progreso' : 'In Progress'}
+                              {t.roadmap.inProgress}
                             </span>
                           )}
                         </div>

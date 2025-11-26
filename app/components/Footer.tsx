@@ -1,31 +1,21 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Github, Twitter, Youtube, Mail } from 'lucide-react'
+import { Github, Youtube, Mail } from 'lucide-react'
 import { useI18n } from '@/lib/i18n-context'
 
 const footerLinks = {
-  product: [
-    { name: 'About', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Careers', href: '#' },
-  ],
   community: [
-    { name: 'GitHub', href: '#', icon: Github },
-    { name: 'Discord', href: '#' },
-    { name: 'Twitter', href: '#', icon: Twitter },
-    { name: 'YouTube', href: '#', icon: Youtube },
+    { name: 'GitHub', href: 'https://github.com/AndreeSalazar', icon: Github },
+    { name: 'Discord', href: 'https://discord.gg/CjHfWgvK' },
+    { name: 'YouTube', href: 'https://www.youtube.com/@Qdantex', icon: Youtube },
   ],
   legal: [
     { name: 'Privacy Policy', href: '#' },
     { name: 'Terms of Service', href: '#' },
-    { name: 'Cookie Policy', href: '#' },
   ],
   contact: [
-    { name: 'hello@omega-visual.dev', href: 'mailto:hello@omega-visual.dev', icon: Mail },
-    { name: 'Press kit', href: '#' },
-    { name: 'Partnership inquiries', href: '#' },
+    { name: 'eddi.salazar.dev@gmail.com', href: 'mailto:eddi.salazar.dev@gmail.com', icon: Mail },
   ],
 }
 
@@ -35,25 +25,8 @@ export default function Footer() {
   return (
     <footer className="bg-background border-t border-surface py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8 mb-12">
-          {/* Links Column 1 */}
-          <div>
-            <h3 className="text-lg font-bold text-text mb-4">{t.footer.product}</h3>
-            <ul className="space-y-2">
-              {footerLinks.product.map((link, index) => (
-                <li key={index}>
-                  <a
-                    href={link.href}
-                    className="text-text/60 hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Links Column 2 */}
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
+          {/* Links Column 1 - Community */}
           <div>
             <h3 className="text-lg font-bold text-text mb-4">{t.footer.community}</h3>
             <ul className="space-y-2">
@@ -71,7 +44,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Links Column 3 */}
+          {/* Links Column 2 - Legal */}
           <div>
             <h3 className="text-lg font-bold text-text mb-4">{t.footer.legal}</h3>
             <ul className="space-y-2">
@@ -88,7 +61,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Links Column 4 */}
+          {/* Links Column 3 - Contact */}
           <div>
             <h3 className="text-lg font-bold text-text mb-4">{t.footer.contact}</h3>
             <ul className="space-y-2">
@@ -119,6 +92,8 @@ export default function Footer() {
               <p>{t.footer.copyright4}</p>
               <p className="mt-3">{t.footer.copyright5}</p>
               <p>{t.footer.copyright6}</p>
+              <p>{t.footer.copyright7}</p>
+              <p className="mt-3">{t.footer.copyright8}</p>
             </div>
           </div>
         </div>

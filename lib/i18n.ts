@@ -10,13 +10,14 @@ export const translations = {
       features: 'Features',
       useCases: 'Use Cases',
       joinBeta: 'Join Beta',
+      developedBy: 'Developed by a Peruvian',
     },
     // Language Prompt
     languagePrompt: {
-      title: '¿Cambiar Idioma a Español?',
-      subtitle: 'If not, you can ignore it by keeping English',
+      title: 'Do you want to change language?',
+      subtitle: 'Switch language now for a better experience',
       keepCurrent: 'Keep in English',
-      switchTo: 'Si Cambiar a Español',
+      switchTo: 'Yes, I do',
       close: 'Close',
     },
     // Hero
@@ -44,33 +45,34 @@ export const translations = {
     // Problem Solution
     problemSolution: {
       problemTitle: 'System Development is Broken',
+      problemSubtitle: 'The fundamental problems that slow down low-level programming',
       problems: [
         {
           title: 'Assembly is Text',
-          description: 'You write 5,000 lines in Vim. If something fails, you manually search through scattered files.',
+          description: 'You write 5,000+ lines in Vim or a basic editor. No visual structure. When something fails, you manually grep through dozens of scattered .asm files. Debugging means reading hex dumps and memory addresses. No way to see the big picture.',
         },
         {
           title: 'Composition is Manual',
-          description: 'Macros, includes, headers. Every change = recompile everything. Infinite Git conflicts.',
+          description: 'Macros, includes, headers scattered everywhere. Change one file? Recompile the entire project. Git conflicts on every merge because everyone edits the same headers. No dependency graph. No automatic resolution.',
         },
         {
           title: 'Teams Work in Silos',
-          description: 'Developer A waits for B to finish. Merge hell. 2 hours of overhead for 10 lines.',
+          description: 'Developer A waits for B to finish their module. Can\'t see what others are doing. Merge hell with conflicting changes. 2 hours of overhead for 10 lines of code. No real-time visibility. Collaboration = waiting.',
         },
       ],
       solutionTitle: 'Omega-Visual Changes Everything',
       solutions: [
         {
           title: 'Visual Nodes',
-          description: 'Each file is a node. Double-click to edit. Connections show dependencies.',
+          description: 'Each file is a node. Double-click to edit. Connections show dependencies. Navigate complex codebases visually. See your entire system architecture at a glance. No more hunting through folders.',
         },
         {
           title: 'Houdini-Style Composition',
-          description: '{{node_name}} inherits upstream code. Dual-view: Raw vs Composed. Automatic.',
+          description: '{{node_name}} inherits upstream code automatically. Dual-view: Raw (with placeholders) vs Composed (fully resolved). Change once, propagate everywhere. Eliminates manual includes and macro management.',
         },
         {
           title: 'Real-Time Collaboration',
-          description: 'See your team\'s cursors. Connect nodes live. Run All = compiles on each PC.',
+          description: 'See your team\'s cursors live. Connect nodes together in real-time. Run All compiles on each developer\'s machine simultaneously. No merge conflicts. Work together, not in isolation. (In active development)',
         },
       ],
     },
@@ -126,6 +128,8 @@ export const translations = {
     // Features
     features: {
       title: 'Enterprise-Grade Features',
+      subtitle: 'Features designed for professional developers',
+      comingSoon: 'Coming Soon',
       items: [
         {
           title: 'Real Assembly x86-64',
@@ -179,6 +183,8 @@ export const translations = {
     comparison: {
       title: 'Why Omega-Visual Wins',
       seeFull: 'See the full comparison →',
+      featureLabel: 'Feature',
+      soon: 'Soon',
       tools: {
         visualStudio: 'Visual Studio',
         vsCode: 'VSCode',
@@ -369,6 +375,9 @@ export const translations = {
     roadmap: {
       title: 'The Future of Omega-Visual',
       conceptBirth: 'Concept Born: November 16, 2025',
+      future: 'Future',
+      completed: 'Completed',
+      inProgress: 'In Progress',
       inspirations: {
         title: 'Built on Proven Foundations',
         subtitle: 'Omega-Visual draws inspiration from industry-leading tools, combining their best features into a unified platform for system development.',
@@ -463,23 +472,25 @@ export const translations = {
       copyright: '© 2024-2025 Eddi Andreé Salazar Matos. All rights reserved.',
       copyright2: 'Omega-Visual and its visual node system are protected under',
       copyright3: 'the Berne Convention for the Protection of Literary and',
-      copyright4: 'Artistic Works.',
-      copyright5: 'Patent pending: Visual node composition for low-level programming.',
-      copyright6: 'First public disclosure: November 16, 2025',
+      copyright4: 'Artistic Works (1886).',
+      copyright5: 'Work created: November 16, 2025. Copyright protection',
+      copyright6: 'is automatic upon creation under Article 5(2) of the',
+      copyright7: 'Berne Convention. No registration required.',
+      copyright8: 'Patent pending: Visual node composition for low-level programming.',
     },
     // Coming Soon AI
     comingSoonAI: {
-      badge: 'Próximamente',
-      title1: 'Desarrollo con IA',
-      title2: 'Está en el Horizonte',
-      description: 'Omega-Visual revolucionará tu flujo de trabajo con IA que analiza constantemente cada nodo, asegurando un rendimiento óptimo mientras te enfocas en construir. Colabora sin problemas con otros desarrolladores en tiempo real.',
-      feature1Title: 'Análisis de Nodos con IA',
-      feature1Description: 'IA avanzada monitorea y analiza continuamente cada nodo en tu grafo, detectando problemas potenciales, optimizando el rendimiento y sugiriendo mejoras automáticamente.',
-      feature2Title: 'Colaboración en Tiempo Real',
-      feature2Description: 'Trabaja junto con tu equipo en tiempo real. Ve cambios en vivo, comparte ideas y construye sistemas complejos de forma colaborativa sin conflictos.',
-      feature3Title: 'Monitoreo Continuo',
-      feature3Description: 'Nunca más te preocupes por la salud de tus nodos. La IA vigila todo tu grafo 24/7, alertándote sobre problemas antes de que se conviertan en errores.',
-      cta: 'Mantente al día con las actualizaciones',
+      badge: 'Coming Soon',
+      title1: 'AI-Powered Development',
+      title2: 'Is on the Horizon',
+      description: 'Omega-Visual will revolutionize your workflow with AI that constantly analyzes each node, ensuring optimal performance while you focus on building. Collaborate seamlessly with other developers in real-time.',
+      feature1Title: 'AI Node Analysis',
+      feature1Description: 'Advanced AI continuously monitors and analyzes each node in your graph, detecting potential problems, optimizing performance, and automatically suggesting improvements.',
+      feature2Title: 'Real-Time Collaboration',
+      feature2Description: 'Work together with your team in real-time. See live changes, share ideas, and build complex systems collaboratively without conflicts.',
+      feature3Title: 'Continuous Monitoring',
+      feature3Description: 'Never worry about the health of your nodes again. AI monitors your entire graph 24/7, alerting you to problems before they turn into errors.',
+      cta: 'Stay up to date with updates',
     },
   },
   es: {
@@ -488,6 +499,7 @@ export const translations = {
       features: 'Características',
       useCases: 'Casos de Uso',
       joinBeta: 'Únete a Beta',
+      developedBy: 'Desarrollado por un Peruano',
     },
     // Language Prompt
     languagePrompt: {
@@ -522,33 +534,34 @@ export const translations = {
     // Problem Solution
     problemSolution: {
       problemTitle: 'El Desarrollo de Sistemas Está Roto',
+      problemSubtitle: 'Los problemas fundamentales que ralentizan la programación de bajo nivel',
       problems: [
         {
           title: 'Assembly es Texto',
-          description: 'Escribes 5,000 líneas en Vim. Si algo falla, buscas manualmente en archivos dispersos.',
+          description: 'Escribes 5,000+ líneas en Vim o un editor básico. Sin estructura visual. Cuando algo falla, buscas manualmente con grep en docenas de archivos .asm dispersos. Depurar significa leer hex dumps y direcciones de memoria. No hay forma de ver el panorama completo.',
         },
         {
           title: 'La Composición es Manual',
-          description: 'Macros, includes, headers. Cada cambio = recompilar todo. Conflictos infinitos de Git.',
+          description: 'Macros, includes, headers dispersos por todas partes. ¿Cambias un archivo? Recompila todo el proyecto. Conflictos de Git en cada merge porque todos editan los mismos headers. Sin grafo de dependencias. Sin resolución automática.',
         },
         {
           title: 'Los Equipos Trabajan en Silos',
-          description: 'El desarrollador A espera que B termine. Merge hell. 2 horas de overhead por 10 líneas.',
+          description: 'El desarrollador A espera que B termine su módulo. No puede ver qué están haciendo otros. Merge hell con cambios conflictivos. 2 horas de overhead por 10 líneas de código. Sin visibilidad en tiempo real. Colaboración = esperar.',
         },
       ],
       solutionTitle: 'Omega-Visual Lo Cambia Todo',
       solutions: [
         {
           title: 'Nodos Visuales',
-          description: 'Cada archivo es un nodo. Doble-click para editar. Las conexiones muestran dependencias.',
+          description: 'Cada archivo es un nodo. Doble-click para editar. Las conexiones muestran dependencias. Navega codebases complejos visualmente. Ve toda la arquitectura de tu sistema de un vistazo. Sin buscar entre carpetas.',
         },
         {
           title: 'Composición Estilo Houdini',
-          description: '{{node_name}} hereda código upstream. Vista dual: Raw vs Composed. Automático.',
+          description: '{{node_name}} hereda código upstream automáticamente. Vista dual: Raw (con placeholders) vs Composed (totalmente resuelto). Cambia una vez, propaga en todas partes. Elimina includes y macros manuales.',
         },
         {
           title: 'Colaboración en Tiempo Real',
-          description: 'Ve los cursores de tu equipo. Conecta nodos en vivo. Run All = compila en cada PC.',
+          description: 'Ve los cursores de tu equipo en vivo. Conecta nodos juntos en tiempo real. Run All compila en cada máquina simultáneamente. Sin conflictos de merge. Trabaja junto, no aislado. (En desarrollo activo)',
         },
       ],
     },
@@ -604,6 +617,8 @@ export const translations = {
     // Features
     features: {
       title: 'Características de Nivel Empresarial',
+      subtitle: 'Características diseñadas para desarrolladores profesionales',
+      comingSoon: 'Próximamente',
       items: [
         {
           title: 'Assembly x86-64 Real',
@@ -657,6 +672,8 @@ export const translations = {
     comparison: {
       title: 'Por Qué Omega-Visual Gana',
       seeFull: 'Ver la comparación completa →',
+      featureLabel: 'Característica',
+      soon: 'Próximamente',
       tools: {
         visualStudio: 'Visual Studio',
         vsCode: 'VSCode',
@@ -847,6 +864,9 @@ export const translations = {
     roadmap: {
       title: 'El Futuro de Omega-Visual',
       conceptBirth: 'Concepto Nacido: 16 de Noviembre, 2025',
+      future: 'Futuro',
+      completed: 'Completado',
+      inProgress: 'En Progreso',
       inspirations: {
         title: 'Construido sobre Fundamentos Probados',
         subtitle: 'Omega-Visual se inspira en herramientas líderes de la industria, combinando sus mejores características en una plataforma unificada para desarrollo de sistemas.',
@@ -955,9 +975,11 @@ export const translations = {
       copyright: '© 2024-2025 Eddi Andreé Salazar Matos. Todos los derechos reservados.',
       copyright2: 'Omega-Visual y su sistema de nodos visuales están protegidos bajo',
       copyright3: 'la Convención de Berna para la Protección de Obras Literarias y',
-      copyright4: 'Artísticas.',
-      copyright5: 'Patente pendiente: Composición de nodos visuales para programación de bajo nivel.',
-      copyright6: 'Primera divulgación pública: 16 de noviembre de 2025',
+      copyright4: 'Artísticas (1886).',
+      copyright5: 'Obra creada: 16 de noviembre de 2025. La protección de derechos',
+      copyright6: 'de autor es automática desde la creación según el Artículo 5(2)',
+      copyright7: 'de la Convención de Berna. No se requiere registro.',
+      copyright8: 'Patente pendiente: Composición de nodos visuales para programación de bajo nivel.',
     },
   },
 } as const

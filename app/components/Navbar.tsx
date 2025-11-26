@@ -31,7 +31,33 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center gap-6">
+            {/* Developed by Peruvian badge */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg glass-effect border border-text/10 hover:border-primary/30 transition-all group"
+            >
+              {/* Peru Flag SVG */}
+              <svg 
+                className="w-6 h-4 flex-shrink-0" 
+                viewBox="0 0 900 600" 
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))',
+                }}
+              >
+                <rect width="900" height="600" fill="#D91023"/>
+                <rect x="0" y="0" width="300" height="600" fill="#D91023"/>
+                <rect x="300" y="0" width="300" height="600" fill="#ffffff"/>
+                <rect x="600" y="0" width="300" height="600" fill="#D91023"/>
+              </svg>
+              <span className="text-xs font-semibold text-text/70 group-hover:text-primary transition-colors whitespace-nowrap">
+                {t.nav.developedBy}
+              </span>
+            </motion.div>
+
             <motion.div
               whileHover={{ scale: 1.05 }}
               className="text-2xl font-bold text-gradient"
